@@ -1,11 +1,9 @@
-// src/App.jsx - Updated version
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { ThemeProvider } from "@/contexts/theme-context";
 
 import Layout from "@/routes/layout";
 import DashboardPage from "@/routes/dashboard/page";
-import LibraryPage from "@/routes/library/page";
 
 function App() {
     const router = createBrowserRouter([
@@ -18,28 +16,24 @@ function App() {
                     element: <DashboardPage />,
                 },
                 {
-                    path: "chatbot",
-                    element: <h1 className="title">Chatbot</h1>,
+                    path: "analytics",
+                    element: <h1 className="title">Analytics</h1>,
                 },
                 {
-                    path: "repbot",
-                    element: <h1 className="title">RepBot</h1>,
+                    path: "reports",
+                    element: <h1 className="title">Reports</h1>,
                 },
                 {
-                    path: "library",
-                    element: <LibraryPage />,
+                    path: "customers",
+                    element: <h1 className="title">Customers</h1>,
                 },
                 {
-                    path: "workout-plans",
-                    element: <h1 className="title">Workout Plans</h1>,
+                    path: "new-customer",
+                    element: <h1 className="title">New Customer</h1>,
                 },
                 {
-                    path: "tutorials",
-                    element: <h1 className="title">Video Tutorials</h1>,
-                },
-                {
-                    path: "progress",
-                    element: <h1 className="title">Progress Tracker</h1>,
+                    path: "verified-customers",
+                    element: <h1 className="title">Verified Customers</h1>,
                 },
                 {
                     path: "products",
