@@ -1,4 +1,4 @@
-import { ChartColumn, Home, NotepadText, Package, PackagePlus, Settings, ShoppingBag, UserCheck, UserPlus, Users } from "lucide-react";
+import { BarChart, BookOpen, ChartColumn, Dumbbell, Home, NotepadText, Package, PackagePlus, Settings, ShoppingBag, TreePine, UserCheck, UserPlus, Users } from "lucide-react";
 
 import ProfileImage from "@/assets/profile-image.jpg";
 import ProductImage from "@/assets/product-image.jpg";
@@ -12,55 +12,40 @@ export const navbarLinks = [
                 icon: Home,
                 path: "/",
             },
+        ],
+    },
+    {
+        title: "Hot Features",
+        links: [
             {
-                label: "Analytics",
+                label: "Chatbot",
                 icon: ChartColumn,
-                path: "/analytics",
+                path: "/chatbot",
             },
             {
-                label: "Reports",
+                label: "RepBot",
                 icon: NotepadText,
-                path: "/reports",
+                path: "/repbot",
             },
         ],
     },
     {
-        title: "Customers",
+        title: "Fitness Features",
         links: [
             {
-                label: "Customers",
-                icon: Users,
-                path: "/customers",
+                label: "Library",
+                icon: BookOpen,
+                path: "/library",
             },
             {
-                label: "New customer",
-                icon: UserPlus,
-                path: "/new-customer",
+                label: "Exercise Tracker",
+                icon: Dumbbell,
+                path: "/exercise-tracker",
             },
             {
-                label: "Verified customers",
-                icon: UserCheck,
-                path: "/verified-customers",
-            },
-        ],
-    },
-    {
-        title: "Products",
-        links: [
-            {
-                label: "Products",
-                icon: Package,
-                path: "/products",
-            },
-            {
-                label: "New product",
-                icon: PackagePlus,
-                path: "/new-product",
-            },
-            {
-                label: "Inventory",
-                icon: ShoppingBag,
-                path: "/inventory",
+                label: "Rapidtree",
+                icon: TreePine,
+                path: "/rapidtree",
             },
         ],
     },

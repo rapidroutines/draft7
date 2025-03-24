@@ -16,36 +16,24 @@ function App() {
                     element: <DashboardPage />,
                 },
                 {
-                    path: "analytics",
-                    element: <h1 className="title">Analytics</h1>,
+                    path: "chatbot",
+                    element: <h1 className="title">Chatbot</h1>,
                 },
                 {
-                    path: "reports",
-                    element: <h1 className="title">Reports</h1>,
+                    path: "repbot",
+                    element: <h1 className="title">RepBot</h1>,
                 },
                 {
-                    path: "customers",
-                    element: <h1 className="title">Customers</h1>,
+                    path: "library",
+                    element: <h1 className="title">Library</h1>,
                 },
                 {
-                    path: "new-customer",
-                    element: <h1 className="title">New Customer</h1>,
+                    path: "exercise-tracker",
+                    element: <h1 className="title">Exercise Tracker</h1>,
                 },
                 {
-                    path: "verified-customers",
-                    element: <h1 className="title">Verified Customers</h1>,
-                },
-                {
-                    path: "products",
-                    element: <h1 className="title">Products</h1>,
-                },
-                {
-                    path: "new-product",
-                    element: <h1 className="title">New Product</h1>,
-                },
-                {
-                    path: "inventory",
-                    element: <h1 className="title">Inventory</h1>,
+                    path: "rapidtree",
+                    element: <h1 className="title">Rapidtree</h1>,
                 },
                 {
                     path: "settings",
