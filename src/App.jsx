@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/contexts/theme-context";
 
 import Layout from "@/routes/layout";
 import DashboardPage from "@/routes/dashboard/page";
+import ChatbotPage from "@/routes/chatbot/page"; // Import the new ChatbotPage component
 
 function App() {
     const router = createBrowserRouter([
@@ -16,12 +17,12 @@ function App() {
                     element: <DashboardPage />,
                 },
                 {
-                    path: "chatbot",
-                    element: <h1 className="title">Chatbot</h1>,
+                    path: "analytics",
+                    element: <h1 className="title">Analytics</h1>,
                 },
                 {
-                    path: "repbot",
-                    element: <h1 className="title">RepBot</h1>,
+                    path: "reports",
+                    element: <h1 className="title">Reports</h1>,
                 },
                 {
                     path: "library",
@@ -34,6 +35,10 @@ function App() {
                 {
                     path: "rapidtree",
                     element: <h1 className="title">Rapidtree</h1>,
+                },
+                {
+                    path: "chatbot",
+                    element: <ChatbotPage />, // Add the chatbot page route
                 },
                 {
                     path: "settings",
