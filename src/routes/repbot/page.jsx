@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Maximize2, Minimize2, Camera, RefreshCw } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Footer } from "@/layouts/footer";
+import { useLocation } from "react-router-dom";
 
 const RepBotPage = () => {
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -10,6 +11,8 @@ const RepBotPage = () => {
     const [iframeVisible, setIframeVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const iframeRef = useRef(null);
+    const location = useLocation();
+    const sessionKey = useRef(`repbot-session-${Date.now()}`).current;
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
@@ -22,14 +25,65 @@ const RepBotPage = () => {
         
         // If the iframe is already visible, reload it
         if (iframeVisible && iframeRef.current) {
-            iframeRef.current.src = iframeRef.current.src;
+            // Add timestamp to force a complete reload without caching
+            const currentSrc = iframeRef.current.src.split('?')[0];
+            iframeRef.current.src = `${currentSrc}?t=${Date.now()}`;
         } else {
             // Otherwise, show the camera prompt again
             setShowCameraPrompt(true);
             setIframeVisible(false);
+            
+            // Clear the session storage
+            try {
+                sessionStorage.removeItem(sessionKey);
+            } catch (error) {
+                console.error("Error clearing sessionStorage:", error);
+            }
         }
     };
 
+    // Initialize component state from sessionStorage to persist across reloads
+    useEffect(() => {
+        try {
+            const storedState = sessionStorage.getItem(sessionKey);
+            if (storedState) {
+                const { hadCameraAccess } = JSON.parse(storedState);
+                if (hadCameraAccess) {
+                    setShowCameraPrompt(false);
+                    setIframeVisible(true);
+                }
+            }
+        } catch (error) {
+            console.error("Error reading from sessionStorage:", error);
+        }
+    }, [sessionKey]);
+
+    // Handle route changes and page reloads
+    useEffect(() => {
+        // When component loads or route changes, reset any errors
+        setErrorMessage("");
+        
+        // Save state before unloading
+        const handleBeforeUnload = () => {
+            try {
+                const stateToStore = {
+                    hadCameraAccess: iframeVisible,
+                    timestamp: Date.now()
+                };
+                sessionStorage.setItem(sessionKey, JSON.stringify(stateToStore));
+            } catch (error) {
+                console.error("Error saving to sessionStorage:", error);
+            }
+        };
+        
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            handleBeforeUnload(); // Save state when component unmounts
+        };
+    }, [location.pathname, iframeVisible, sessionKey]);
+    
     // Handle escape key to exit fullscreen
     useEffect(() => {
         const handleEscKey = (event) => {
@@ -94,6 +148,17 @@ const RepBotPage = () => {
             // Hide the prompt and show the iframe
             setShowCameraPrompt(false);
             setIframeVisible(true);
+            
+            // Save the camera access permission to session storage
+            try {
+                const stateToStore = {
+                    hadCameraAccess: true,
+                    timestamp: Date.now()
+                };
+                sessionStorage.setItem(sessionKey, JSON.stringify(stateToStore));
+            } catch (error) {
+                console.error("Error saving to sessionStorage:", error);
+            }
         } catch (error) {
             console.error("Camera access error:", error);
             // Show specific error message based on the error type
@@ -207,13 +272,18 @@ const RepBotPage = () => {
                     {iframeVisible && (
                         <iframe
                             ref={iframeRef}
-                            src="https://render-repbot.vercel.app/"
+                            src={`https://render-repbot.vercel.app/?session=${sessionKey}`}
                             className="h-full w-full border-0"
                             onLoad={() => setIsLoading(false)}
+                            onError={() => {
+                                setErrorMessage("Failed to load RepBot. Please try again.");
+                                setIsLoading(false);
+                            }}
                             title="RepBot Exercise Tracker"
                             allow="camera *; microphone *; accelerometer; gyroscope"
                             allowFullScreen
                             referrerPolicy="origin"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups allow-downloads"
                         />
                     )}
                 </div>
