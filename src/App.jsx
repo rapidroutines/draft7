@@ -4,7 +4,8 @@ import { ThemeProvider } from "@/contexts/theme-context";
 
 import Layout from "@/routes/layout";
 import DashboardPage from "@/routes/dashboard/page";
-import ChatbotPage from "@/routes/chatbot/page"; // Import the new ChatbotPage component
+import ChatbotPage from "@/routes/chatbot/page";
+import RepBotPage from "@/routes/repbot/page"; // Import the RepBot page component
 
 function App() {
     const router = createBrowserRouter([
@@ -38,7 +39,11 @@ function App() {
                 },
                 {
                     path: "chatbot",
-                    element: <ChatbotPage />, // Add the chatbot page route
+                    element: <ChatbotPage />,
+                },
+                {
+                    path: "repbot",
+                    element: <RepBotPage />, // Map to the repbot route
                 },
                 {
                     path: "settings",
