@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Maximize2, Minimize2, Camera, AlertCircle } from "lucide-react";
+import { Maximize2, Minimize2, Camera } from "lucide-react";
 import { cn } from "@/utils/cn";
 
 const RepBotPage = () => {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [permissionState, setPermissionState] = useState("initial"); // initial, granted, denied, requesting
-    const [iframeLoaded, setIframeLoaded] = useState(false);
+    const [showCameraPrompt, setShowCameraPrompt] = useState(true);
+    const [iframeVisible, setIframeVisible] = useState(false);
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
@@ -24,104 +24,25 @@ const RepBotPage = () => {
         return () => window.removeEventListener("keydown", handleEscKey);
     }, [isFullscreen]);
 
-    // Check if camera permissions are already granted
-    useEffect(() => {
-        const checkPermissions = async () => {
-            try {
-                // Check if we can access permission state
-                if (navigator.permissions && navigator.permissions.query) {
-                    const result = await navigator.permissions.query({ name: 'camera' });
-                    setPermissionState(result.state);
-                    
-                    // Listen for permission changes
-                    result.onchange = () => {
-                        setPermissionState(result.state);
-                    };
-                }
-            } catch (error) {
-                console.log("Permission check error:", error);
-                // If we can't check permissions, we'll rely on the request permission flow
-            }
-        };
-        
-        checkPermissions();
-    }, []);
-
-    const requestCameraPermission = async () => {
-        setPermissionState("requesting");
-        
+    const handleCameraAccess = async () => {
         try {
-            // Request camera access
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            // Simple approach - just try to get camera access
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: true,
+                audio: false
+            });
             
-            // If we got here, permission was granted
-            setPermissionState("granted");
-            
-            // Stop the stream since we just needed it for the permission
+            // Stop the tracks immediately - we just needed permission
             stream.getTracks().forEach(track => track.stop());
             
-            // Set a timeout to allow animations to complete
-            setTimeout(() => {
-                setIframeLoaded(true);
-            }, 500);
-            
+            // Hide the prompt and show the iframe
+            setShowCameraPrompt(false);
+            setIframeVisible(true);
         } catch (error) {
-            console.error("Camera permission denied:", error);
-            setPermissionState("denied");
+            console.error("Camera access error:", error);
+            // Keep the prompt visible with error state
+            // You could set an error state here if you want to show different UI
         }
-    };
-
-    const renderPermissionUI = () => {
-        if (permissionState === "granted" || iframeLoaded) {
-            return null;
-        }
-        
-        return (
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80 z-20">
-                <div className="max-w-md rounded-xl bg-white p-6 text-center dark:bg-slate-800">
-                    {permissionState === "denied" ? (
-                        <>
-                            <AlertCircle className="mx-auto h-12 w-12 text-red-500" />
-                            <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">Camera Access Denied</h3>
-                            <p className="mt-2 text-slate-600 dark:text-slate-300">
-                                RepBot needs camera access to analyze your exercise form. Please enable camera access in your browser settings and reload this page.
-                            </p>
-                            <button
-                                onClick={() => window.location.reload()}
-                                className="mt-4 w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
-                            >
-                                Reload Page
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Camera className="mx-auto h-12 w-12 text-blue-500" />
-                            <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
-                                {permissionState === "requesting" ? "Requesting Camera Access..." : "Camera Access Required"}
-                            </h3>
-                            <p className="mt-2 text-slate-600 dark:text-slate-300">
-                                RepBot needs your camera to analyze your exercise form and provide feedback. Your video stays on your device and is not stored.
-                            </p>
-                            {permissionState !== "requesting" && (
-                                <button
-                                    onClick={requestCameraPermission}
-                                    className="mt-4 w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
-                                    disabled={permissionState === "requesting"}
-                                >
-                                    {permissionState === "requesting" ? "Requesting Access..." : "Allow Camera Access"}
-                                </button>
-                            )}
-                            {permissionState === "requesting" && (
-                                <div className="mt-4 flex items-center justify-center">
-                                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-                                    <span className="ml-2 text-slate-600 dark:text-slate-300">Please allow camera access in the browser prompt</span>
-                                </div>
-                            )}
-                        </>
-                    )}
-                </div>
-            </div>
-        );
     };
 
     return (
@@ -132,7 +53,7 @@ const RepBotPage = () => {
             <div className="flex items-center justify-between">
                 <h1 className="title">RepBot</h1>
                 <div className="flex items-center gap-3">
-                    <button 
+                    <button
                         className="flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
                         onClick={toggleFullscreen}
                     >
@@ -156,8 +77,31 @@ const RepBotPage = () => {
                     "relative",
                     isFullscreen ? "h-[calc(100vh-80px)]" : "h-[80vh]"
                 )}>
-                    {isLoading && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90 z-10">
+                    {/* Camera permission prompt */}
+                    {showCameraPrompt && (
+                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-900/80">
+                            <div className="max-w-md rounded-xl bg-white p-6 text-center dark:bg-slate-800">
+                                <Camera className="mx-auto h-12 w-12 text-blue-500" />
+                                <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+                                    Camera Access Required
+                                </h3>
+                                <p className="mt-2 text-slate-600 dark:text-slate-300">
+                                    RepBot needs your camera to analyze your exercise form and provide feedback.
+                                    Your video stays on your device and is not stored.
+                                </p>
+                                <button
+                                    onClick={handleCameraAccess}
+                                    className="mt-4 w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
+                                >
+                                    Allow Camera Access
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Loading indicator */}
+                    {isLoading && iframeVisible && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900/90">
                             <div className="flex flex-col items-center">
                                 <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
                                 <p className="mt-2 text-blue-400">Loading RepBot</p>
@@ -165,10 +109,9 @@ const RepBotPage = () => {
                         </div>
                     )}
                     
-                    {renderPermissionUI()}
-                    
-                    {(permissionState === "granted" || iframeLoaded) && (
-                        <iframe 
+                    {/* RepBot iframe */}
+                    {iframeVisible && (
+                        <iframe
                             src="https://render-repbot.vercel.app/"
                             className="h-full w-full border-0"
                             onLoad={() => setIsLoading(false)}
