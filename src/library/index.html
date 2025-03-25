@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RapidFit Exercise Library</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+            <h1>RapidFit Exercise Library</h1>
+            <p>Explore our collection of effective exercises for building strength, improving mobility, and enhancing cardio fitness.</p>
+        </header>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All Exercises</button>
+            <button class="filter-btn" data-filter="calisthenics">Calisthenics</button>
+            <button class="filter-btn" data-filter="mobility">Mobility</button>
+            <button class="filter-btn" data-filter="cardio">Cardio</button>
+        </div>
+
+        <div class="exercise-grid" id="exerciseGrid">
+            <!-- Exercise cards will be added here via JavaScript -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

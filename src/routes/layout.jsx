@@ -1,18 +1,14 @@
 import { Outlet } from "react-router-dom";
-
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useClickOutside } from "@/hooks/use-click-outside";
-
 import { Sidebar } from "@/layouts/sidebar";
 import { Header } from "@/layouts/header";
-
 import { cn } from "@/utils/cn";
 import { useEffect, useRef, useState } from "react";
 
 const Layout = () => {
     const isDesktopDevice = useMediaQuery("(min-width: 768px)");
     const [collapsed, setCollapsed] = useState(!isDesktopDevice);
-
     const sidebarRef = useRef(null);
 
     useEffect(() => {
@@ -26,7 +22,7 @@ const Layout = () => {
     });
 
     return (
-        <div className="min-h-screen bg-slate-100 transition-colors dark:bg-slate-950">
+        <div className="min-h-screen bg-slate-100">
             <div
                 className={cn(
                     "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",

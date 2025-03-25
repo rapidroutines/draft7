@@ -6,6 +6,8 @@ import Layout from "@/routes/layout";
 import DashboardPage from "@/routes/dashboard/page";
 import ChatbotPage from "@/routes/chatbot/page";
 import RepBotPage from "@/routes/repbot/page";
+import ExerciseTrackerPage from "@/routes/exercise-tracker/page";
+import LibraryPage from "@/routes/library/page";
 
 function App() {
     // Changed from createBrowserRouter to createHashRouter
@@ -28,11 +30,11 @@ function App() {
                 },
                 {
                     path: "library",
-                    element: <h1 className="title">Library</h1>,
+                    element: <LibraryPage />,
                 },
                 {
                     path: "exercise-tracker",
-                    element: <h1 className="title">Exercise Tracker</h1>,
+                    element: <ExerciseTrackerPage />,
                 },
                 {
                     path: "rapidtree",

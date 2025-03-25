@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply [scrollbar-color:_#cbd5e1_transparent] dark:[scrollbar-color:_#334155_transparent];
+        @apply [scrollbar-color:_#cbd5e1_transparent];
     }
 }
 
@@ -14,34 +14,34 @@
     }
 
     .sidebar-group-title {
-        @apply overflow-hidden text-ellipsis text-sm font-medium text-slate-600 dark:text-slate-400;
+        @apply overflow-hidden text-ellipsis text-sm font-medium text-slate-600;
     }
 
     .sidebar-item {
-        @apply flex h-[40px] w-full flex-shrink-0 items-center gap-x-3 rounded-lg p-3 text-base font-medium text-slate-900 transition-colors hover:bg-blue-50 dark:text-slate-50 dark:hover:bg-blue-950;
+        @apply flex h-[40px] w-full flex-shrink-0 items-center gap-x-3 rounded-lg p-3 text-base font-medium text-slate-900 transition-colors hover:bg-[#1e628c]/10;
         &.active {
-            @apply bg-blue-500 text-slate-50 dark:bg-blue-600;
+            @apply bg-[#1e628c] text-slate-50;
         }
     }
 
     .title {
-        @apply text-3xl font-semibold text-slate-900 transition-colors dark:text-slate-50;
+        @apply text-3xl font-semibold text-slate-900;
     }
 
     .btn-ghost {
-        @apply flex h-10 flex-shrink-0 items-center justify-center gap-x-2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-blue-50 hover:text-slate-500 dark:hover:bg-blue-950 dark:hover:text-slate-300;
+        @apply flex h-10 flex-shrink-0 items-center justify-center gap-x-2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-[#1e628c]/10 hover:text-slate-500;
     }
 
     .link {
-        @apply text-base font-medium text-slate-900 transition-colors hover:underline dark:text-slate-50;
+        @apply text-base font-medium text-slate-900 transition-colors hover:underline;
     }
 
     .input {
-        @apply hidden h-10 flex-shrink-0 items-center gap-x-2 rounded-lg border border-slate-300 px-2 text-base text-slate-900 transition-colors has-[input:focus]:border-blue-500 md:flex md:w-auto lg:w-80 dark:border-slate-700 dark:text-slate-50 dark:focus:border-blue-600;
+        @apply hidden h-10 flex-shrink-0 items-center gap-x-2 rounded-lg border border-slate-300 px-2 text-base text-slate-900 transition-colors has-[input:focus]:border-[#1e628c] md:flex md:w-auto lg:w-80;
     }
 
     .card {
-        @apply flex flex-col gap-y-4 rounded-lg border border-slate-300 bg-white p-4 transition-colors dark:border-slate-700 dark:bg-slate-900;
+        @apply flex flex-col gap-y-4 rounded-lg border border-slate-300 bg-white p-4 transition-colors;
     }
 
     .card-header {
@@ -49,7 +49,7 @@
     }
 
     .card-title {
-        @apply font-medium text-slate-900 transition-colors dark:text-slate-50;
+        @apply font-medium text-slate-900;
     }
 
     .card-body {
@@ -57,15 +57,15 @@
     }
 
     .table {
-        @apply h-full w-full text-slate-900 dark:text-slate-50;
+        @apply h-full w-full text-slate-900;
     }
 
     .table-header {
-        @apply sticky top-0 bg-slate-200 transition-[background] dark:bg-slate-800;
+        @apply sticky top-0 bg-slate-200;
     }
 
     .table-row {
-        @apply border-b border-slate-300 transition-colors last:border-none dark:border-slate-700;
+        @apply border-b border-slate-300 transition-colors last:border-none;
     }
 
     .table-head {
@@ -78,13 +78,13 @@
 }
 
 .recharts-default-tooltip {
-    @apply !rounded-lg !border !border-slate-300 !bg-white transition-colors dark:!border-slate-700 dark:!bg-slate-900;
+    @apply !rounded-lg !border !border-slate-300 !bg-white;
 }
 
 .recharts-tooltip-label {
-    @apply text-base font-medium text-slate-900 dark:text-slate-50;
+    @apply text-base font-medium text-slate-900;
 }
 
 .recharts-tooltip-item {
-    @apply text-base font-medium !text-blue-500 dark:!text-blue-600;
+    @apply text-base font-medium !text-[#1e628c];
 }
