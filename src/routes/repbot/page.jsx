@@ -18,9 +18,10 @@ import {
 } from "lucide-react";
 import { Footer } from "@/layouts/footer";
 import { cn } from "@/utils/cn";
+import profileImg from "@/assets/repbot_image.png";
 
 // Use the specified image for all exercise demonstrations
-const REPBOT_IMAGE = "/repbot_image.png";
+const REPBOT_IMAGE = profileImg;
 
 // Exercise types supported by RepBot
 const SUPPORTED_EXERCISES = [
@@ -187,7 +188,7 @@ const RepBotPage = () => {
                 RepBot uses advanced computer vision to analyze your movements, count reps, and provide real-time feedback to improve your technique and prevent injuries.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a href="/repbot/start" className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 font-medium text-blue-700 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <a href="https://rapidroutines.org/repbot/" className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 font-medium text-blue-700 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   <Camera className="mr-2 h-5 w-5" />
                   Launch RepBot
                 </a>
@@ -541,7 +542,7 @@ const RepBotPage = () => {
               Start using RepBot today and transform your workouts with AI-powered form analysis and real-time feedback.
             </p>
             <a 
-              href="/repbot/start" 
+              href="https://rapidroutines.org/repbot/" 
               className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-8 py-3 font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               <Eye size={20} className="mr-2" />
