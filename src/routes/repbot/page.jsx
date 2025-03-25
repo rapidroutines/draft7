@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Maximize2, Minimize2, Camera, RefreshCw } from "lucide-react";
+import { Maximize2, Minimize2, Camera, RefreshCw, Video } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Footer } from "@/layouts/footer";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,8 @@ const RepBotPage = () => {
     const [showCameraPrompt, setShowCameraPrompt] = useState(true);
     const [iframeVisible, setIframeVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [cameraStream, setCameraStream] = useState(null);
+    const videoRef = useRef(null);
     const iframeRef = useRef(null);
     const location = useLocation();
     const sessionKey = useRef(`repbot-session-${Date.now()}`).current;
@@ -23,22 +25,28 @@ const RepBotPage = () => {
         setErrorMessage("");
         setIsLoading(true);
         
+        // Stop any existing camera stream
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+            setCameraStream(null);
+        }
+        
         // If the iframe is already visible, reload it
         if (iframeVisible && iframeRef.current) {
             // Add timestamp to force a complete reload without caching
             const currentSrc = iframeRef.current.src.split('?')[0];
             iframeRef.current.src = `${currentSrc}?t=${Date.now()}`;
-        } else {
-            // Otherwise, show the camera prompt again
-            setShowCameraPrompt(true);
-            setIframeVisible(false);
-            
-            // Clear the session storage
-            try {
-                sessionStorage.removeItem(sessionKey);
-            } catch (error) {
-                console.error("Error clearing sessionStorage:", error);
-            }
+        }
+        
+        // Show the camera prompt again
+        setShowCameraPrompt(true);
+        setIframeVisible(false);
+        
+        // Clear the session storage
+        try {
+            sessionStorage.removeItem(sessionKey);
+        } catch (error) {
+            console.error("Error clearing sessionStorage:", error);
         }
     };
 
@@ -81,8 +89,13 @@ const RepBotPage = () => {
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
             handleBeforeUnload(); // Save state when component unmounts
+            
+            // Clean up any camera streams
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
         };
-    }, [location.pathname, iframeVisible, sessionKey]);
+    }, [location.pathname, iframeVisible, sessionKey, cameraStream]);
     
     // Handle escape key to exit fullscreen
     useEffect(() => {
@@ -98,14 +111,12 @@ const RepBotPage = () => {
 
     // Listen for iframe error events
     useEffect(() => {
-        const handleIframeError = () => {
-            setErrorMessage("There was a problem loading RepBot. Please try refreshing.");
-            setIsLoading(false);
-        };
-
         const iframe = iframeRef.current;
-        if (iframe) {
-            iframe.addEventListener("error", handleIframeError);
+        if (iframe && iframeVisible) {
+            const handleIframeError = () => {
+                setErrorMessage("There was a problem loading RepBot. Please try refreshing.");
+                setIsLoading(false);
+            };
             
             // Handle messages from the iframe
             const handleMessage = (event) => {
@@ -116,6 +127,8 @@ const RepBotPage = () => {
                         if (data.type === 'error' && data.message) {
                             setErrorMessage(data.message);
                             setIsLoading(false);
+                        } else if (data.type === 'loaded') {
+                            setIsLoading(false);
                         }
                     } catch (e) {
                         // Not a JSON message, ignore
@@ -123,6 +136,7 @@ const RepBotPage = () => {
                 }
             };
             
+            iframe.addEventListener("error", handleIframeError);
             window.addEventListener('message', handleMessage);
 
             return () => {
@@ -132,44 +146,94 @@ const RepBotPage = () => {
         }
     }, [iframeVisible]);
 
+    // New direct camera feed component
+    const DirectCameraFeed = () => {
+        useEffect(() => {
+            if (videoRef.current && cameraStream) {
+                videoRef.current.srcObject = cameraStream;
+            }
+        }, []);
+
+        return (
+            <div className="flex h-full flex-col items-center justify-center">
+                <video 
+                    ref={videoRef} 
+                    autoPlay 
+                    muted 
+                    playsInline
+                    className="h-full max-h-[80vh] w-auto rounded-lg border border-slate-300 dark:border-slate-700"
+                />
+            </div>
+        );
+    };
+
     const handleCameraAccess = async () => {
         try {
             setErrorMessage("");
+            console.log("Requesting camera access...");
             
-            // Simple approach - just try to get camera access
+            // Check if MediaDevices API is supported
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error("Your browser doesn't support camera access. Try a different browser.");
+            }
+            
+            // Request camera access with specific constraints to help on mobile
             const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: true,
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: "user" // Prefer front camera on mobile
+                },
                 audio: false
             });
             
-            // Stop the tracks immediately - we just needed permission
-            stream.getTracks().forEach(track => track.stop());
+            // Keep the stream active
+            setCameraStream(stream);
+            console.log("Camera access granted successfully");
             
-            // Hide the prompt and show the iframe
+            // For the iframe approach
             setShowCameraPrompt(false);
             setIframeVisible(true);
             
             // Save the camera access permission to session storage
             try {
-                const stateToStore = {
+                sessionStorage.setItem(sessionKey, JSON.stringify({
                     hadCameraAccess: true,
                     timestamp: Date.now()
-                };
-                sessionStorage.setItem(sessionKey, JSON.stringify(stateToStore));
+                }));
             } catch (error) {
                 console.error("Error saving to sessionStorage:", error);
             }
         } catch (error) {
             console.error("Camera access error:", error);
+            let message = "Unknown camera error occurred.";
+            
             // Show specific error message based on the error type
-            if (error.name === "NotAllowedError") {
-                setErrorMessage("Camera access was denied. Please enable camera access in your browser settings and try again.");
+            if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+                message = "Camera access was denied. Please check your browser settings and try again.";
             } else if (error.name === "NotFoundError") {
-                setErrorMessage("No camera was found. Please ensure your device has a working camera and try again.");
-            } else {
-                setErrorMessage(`Camera error: ${error.message}`);
+                message = "No camera was found. Please connect a camera and try again.";
+            } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
+                message = "Your camera is currently in use by another application. Please close other camera apps and try again.";
+            } else if (error.name === "OverconstrainedError") {
+                message = "Your camera doesn't meet the required constraints. Please try a different camera.";
+            } else if (error.name === "SecurityError") {
+                message = "Camera access is restricted due to security policies. Try using HTTPS or a different browser.";
+            } else if (error.message) {
+                message = `Camera error: ${error.message}`;
             }
+            
+            setErrorMessage(message);
+            console.log(`Camera error details: ${error.name}: ${error.message}`);
         }
+    };
+
+    // Direct camera access as fallback
+    const useDirect = () => {
+        handleCameraAccess().then(() => {
+            setIframeVisible(false);
+            setErrorMessage("");
+        });
     };
 
     return (
@@ -186,7 +250,7 @@ const RepBotPage = () => {
                             onClick={resetIframe}
                         >
                             <RefreshCw size={18} />
-                            <span className="hidden sm:inline">Reload</span>
+                            <span className="hidden sm:inline">Try Again</span>
                         </button>
                     )}
                     <button
@@ -225,12 +289,25 @@ const RepBotPage = () => {
                                     RepBot needs your camera to analyze your exercise form and provide feedback.
                                     Your video stays on your device and is not stored.
                                 </p>
-                                <button
-                                    onClick={handleCameraAccess}
-                                    className="mt-4 w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
-                                >
-                                    Allow Camera Access
-                                </button>
+                                <div className="mt-4 flex flex-col gap-2">
+                                    <button
+                                        onClick={handleCameraAccess}
+                                        className="w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
+                                    >
+                                        Allow Camera Access
+                                    </button>
+                                    <div className="mt-2 flex items-center justify-center">
+                                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                                            Having trouble? Try 
+                                            <button 
+                                                onClick={useDirect} 
+                                                className="ml-1 text-blue-500 hover:underline dark:text-blue-400"
+                                            >
+                                                direct camera mode
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -248,12 +325,21 @@ const RepBotPage = () => {
                                 <p className="mt-2 text-slate-600 dark:text-slate-300">
                                     {errorMessage}
                                 </p>
-                                <button
-                                    onClick={resetIframe}
-                                    className="mt-4 w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
-                                >
-                                    Try Again
-                                </button>
+                                <div className="mt-4 flex flex-col gap-2">
+                                    <button
+                                        onClick={resetIframe}
+                                        className="w-full rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
+                                    >
+                                        Try Again
+                                    </button>
+                                    <button
+                                        onClick={useDirect}
+                                        className="w-full rounded-lg bg-slate-200 px-4 py-2 font-medium text-slate-800 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+                                    >
+                                        <Video size={16} className="mr-2 inline-block" />
+                                        Use Direct Camera Mode
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -268,6 +354,11 @@ const RepBotPage = () => {
                         </div>
                     )}
                     
+                    {/* Direct camera view */}
+                    {cameraStream && !iframeVisible && !errorMessage && (
+                        <DirectCameraFeed />
+                    )}
+                    
                     {/* RepBot iframe */}
                     {iframeVisible && (
                         <iframe
@@ -276,14 +367,13 @@ const RepBotPage = () => {
                             className="h-full w-full border-0"
                             onLoad={() => setIsLoading(false)}
                             onError={() => {
-                                setErrorMessage("Failed to load RepBot. Please try again.");
+                                setErrorMessage("Failed to load RepBot. Please try again or use direct camera mode.");
                                 setIsLoading(false);
                             }}
                             title="RepBot Exercise Tracker"
-                            allow="camera *; microphone *; accelerometer; gyroscope"
+                            allow="camera *; microphone *; accelerometer; gyroscope; autoplay; clipboard-write"
                             allowFullScreen
                             referrerPolicy="origin"
-                            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups allow-downloads"
                         />
                     )}
                 </div>
