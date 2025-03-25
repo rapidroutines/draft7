@@ -188,7 +188,10 @@ const RepBotPage = () => {
                 RepBot uses advanced computer vision to analyze your movements, count reps, and provide real-time feedback to improve your technique and prevent injuries.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a href="https://rapidroutines.org/repbot/" className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 font-medium text-blue-700 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <a 
+                  href="https://rapidroutines.org/repbot/" 
+                  className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 font-medium text-blue-700 shadow-sm transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
                   <Camera className="mr-2 h-5 w-5" />
                   Launch RepBot
                 </a>
@@ -388,12 +391,15 @@ const RepBotPage = () => {
                       RepBot's AI technology analyzes your joint angles, movement patterns, and body positioning to provide precise feedback on your {SUPPORTED_EXERCISES[selectedExercise].name.toLowerCase()} form.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                      <button className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700">
+                      <a 
+                        href="https://rapidroutines.org/repbot/"
+                        className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+                      >
                         <PlayCircle size={18} className="mr-2" />
                         Watch Demo
-                      </button>
+                      </a>
                       <a 
-                        href="/repbot/start"
+                        href="https://rapidroutines.org/repbot/"
                         className="inline-flex items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-white/20"
                       >
                         <Camera size={18} className="mr-2" />
@@ -450,9 +456,12 @@ const RepBotPage = () => {
             className="w-full h-auto object-cover rounded-xl"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-            <button className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 text-white transition-transform hover:scale-110">
+            <a 
+              href="https://rapidroutines.org/repbot/"
+              className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 text-white transition-transform hover:scale-110"
+            >
               <PlayCircle size={40} />
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -542,7 +551,7 @@ const RepBotPage = () => {
               Start using RepBot today and transform your workouts with AI-powered form analysis and real-time feedback.
             </p>
             <a 
-              href="https://rapidroutines.org/repbot/" 
+              href="https://rapidroutines.org/repbot/"
               className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-8 py-3 font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               <Eye size={20} className="mr-2" />
