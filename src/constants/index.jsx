@@ -10,7 +10,7 @@ export const navbarLinks = [
             {
                 label: "Dashboard",
                 icon: Home,
-                path: "/",
+                path: "/", // This will work with HashRouter
             },
         ],
     },
@@ -20,12 +20,12 @@ export const navbarLinks = [
             {
                 label: "Chatbot",
                 icon: ChartColumn,
-                path: "/chatbot",
+                path: "/chatbot", // React Router will handle this correctly with HashRouter
             },
             {
                 label: "RepBot",
                 icon: NotepadText,
-                path: "/repbot",
+                path: "/repbot", // React Router will handle this correctly with HashRouter
             },
         ],
     },

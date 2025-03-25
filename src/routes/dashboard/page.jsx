@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Area, AreaChart, BarChart, Bar, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import { useTheme } from "@/hooks/use-theme";
 import { Footer } from "@/layouts/footer";
+import { Link } from "react-router-dom"; // Import Link component
 import { 
     Activity, 
     Brain, 
@@ -143,14 +144,14 @@ const DashboardPage = () => {
                         <p className="mt-2 max-w-xl text-blue-100">Smart conversational agents and form analysis tools that revolutionize your fitness journey</p>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                        <a href="/chatbot" className="flex items-center rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-lg transition-all hover:bg-white/20">
+                        <Link to="/chatbot" className="flex items-center rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-lg transition-all hover:bg-white/20">
                             <MessageSquare size={18} className="mr-2" />
                             Try ChatBot
-                        </a>
-                        <a href="/repbot" className="flex items-center rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-lg transition-all hover:bg-white/20">
+                        </Link>
+                        <Link to="/repbot" className="flex items-center rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-lg transition-all hover:bg-white/20">
                             <Camera size={18} className="mr-2" />
                             Try RepBot
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -193,13 +194,13 @@ const DashboardPage = () => {
                         >
                             View Demo
                         </button>
-                        <a 
-                            href="/chatbot" 
+                        <Link 
+                            to="/chatbot" 
                             className="flex items-center text-sm font-medium text-blue-600 dark:text-blue-400"
                         >
                             Launch ChatBot
                             <ArrowRight size={16} className="ml-1" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
 
@@ -239,13 +240,13 @@ const DashboardPage = () => {
                         >
                             View Demo
                         </button>
-                        <a 
-                            href="/repbot" 
+                        <Link 
+                            to="/repbot" 
                             className="flex items-center text-sm font-medium text-green-600 dark:text-green-400"
                         >
                             Launch RepBot
                             <ArrowRight size={16} className="ml-1" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -524,9 +525,9 @@ const DashboardPage = () => {
                                     </div>
                                 </div>
                                 
-                                <button className="mt-2 w-full rounded-lg bg-green-600 py-2 text-center text-sm font-medium text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600">
+                                <Link to="/repbot" className="mt-2 block w-full rounded-lg bg-green-600 py-2 text-center text-sm font-medium text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600">
                                     Try RepBot Now
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -535,7 +536,7 @@ const DashboardPage = () => {
 
             {/* Quick Access Tiles */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <a href="/chatbot" className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-1 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
+                <Link to="/chatbot" className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-1 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
                     <div className="rounded-lg bg-white p-4 dark:bg-slate-800">
                         <div className="mb-2 flex justify-between">
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
@@ -548,9 +549,9 @@ const DashboardPage = () => {
                             Get personalized fitness advice through natural conversation
                         </p>
                     </div>
-                </a>
+                </Link>
                 
-                <a href="/repbot" className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-1 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
+                <Link to="/repbot" className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-1 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
                     <div className="rounded-lg bg-white p-4 dark:bg-slate-800">
                         <div className="mb-2 flex justify-between">
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600 dark:bg-green-900/50 dark:text-green-400">
@@ -563,9 +564,9 @@ const DashboardPage = () => {
                             Analyze your workout form to improve technique and results
                         </p>
                     </div>
-                </a>
+                </Link>
                 
-                <a href="#" className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-1 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
+                <Link to="#" className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-1 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
                     <div className="rounded-lg bg-white p-4 dark:bg-slate-800">
                         <div className="mb-2 flex justify-between">
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400">
@@ -578,7 +579,7 @@ const DashboardPage = () => {
                             Customize your fitness profile and preferences
                         </p>
                     </div>
-                </a>
+                </Link>
             </div>
 
             <Footer />

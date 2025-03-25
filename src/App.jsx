@@ -1,14 +1,15 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 
 import { ThemeProvider } from "@/contexts/theme-context";
 
 import Layout from "@/routes/layout";
 import DashboardPage from "@/routes/dashboard/page";
 import ChatbotPage from "@/routes/chatbot/page";
-import RepBotPage from "@/routes/repbot/page"; // Import the RepBot page component
+import RepBotPage from "@/routes/repbot/page";
 
 function App() {
-    const router = createBrowserRouter([
+    // Changed from createBrowserRouter to createHashRouter
+    const router = createHashRouter([
         {
             path: "/",
             element: <Layout />,
@@ -43,7 +44,7 @@ function App() {
                 },
                 {
                     path: "repbot",
-                    element: <RepBotPage />, // Map to the repbot route
+                    element: <RepBotPage />,
                 },
                 {
                     path: "settings",
