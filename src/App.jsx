@@ -8,6 +8,7 @@ import ChatbotPage from "@/routes/chatbot/page";
 import RepBotPage from "@/routes/repbot/page";
 import ExerciseTrackerPage from "@/routes/exercise-tracker/page";
 import LibraryPage from "@/routes/library/page";
+import RapidTreePage from "@/routes/rapidtree/page";  // Import the new RapidTree component
 
 function App() {
     // Changed from createBrowserRouter to createHashRouter
@@ -38,7 +39,7 @@ function App() {
                 },
                 {
                     path: "rapidtree",
-                    element: <h1 className="title">Rapidtree</h1>,
+                    element: <RapidTreePage />,  // Use the new RapidTree component
                 },
                 {
                     path: "chatbot",
