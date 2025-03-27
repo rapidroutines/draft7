@@ -291,22 +291,218 @@ const RapidTreePage = () => {
             !exercises[category][nextExerciseIndex].isCompleted);
     };
 
-    // Get exercise description - simplified for demo
+    // Get exercise description for all exercises
     const getExerciseDescription = (exerciseId) => {
         const descriptions = {
+            // PUSH exercises
+            inclinePushUp: 'Easier push-up with hands elevated, reducing body weight resistance.',
+            kneelingPushUp: 'Push-up performed from knees to reduce resistance for beginners.',
             pushUp: 'The standard push-up works the chest, shoulders, triceps, and core.',
-            widePushUp: 'Wide push-ups place more emphasis on the chest muscles.',
-            // More descriptions would be added here
+            widePushUp: 'Push-ups with hands wider than shoulders to focus on chest muscles.',
+            declinePushUp: 'Push-ups with feet elevated to target upper chest and shoulders.',
+            diamondPushUp: 'Hands form a diamond shape to focus on triceps development.',
+            pseudoPlanche: 'Hands positioned near hips with forward lean to build planche strength.',
+            pikePushUp: 'Body forms an inverted V to shift focus to shoulders.',
+            wallHsPushUp: 'Handstand push-ups using wall support for stability.',
+            archPushUp: 'One arm moves outward during push-up for uneven resistance.',
+            ringPushUp: 'Push-ups on gymnastic rings for increased stabilization.',
+            handstandPushUp: 'Vertical push-ups in handstand position for shoulder strength.',
+            oneArmPushup: 'Advanced push-up using only one arm for extreme strength.',
+            planchePushUp: 'Push-ups performed in the horizontal planche position.',
+            maltese: 'Extremely advanced hold with arms wide and body parallel to ground.',
+            
+            // PULL exercises
+            scapulaPull: 'Fundamental hanging exercise focusing on shoulder blade control.',
+            activeHang: 'Hanging with engaged shoulders to build grip and shoulder stability.',
+            negPullUp: 'Lowering from the top of a pull-up to build initial strength.',
+            australianPull: 'Horizontal pulling with body at an angle under a bar.',
+            chinUp: 'Vertical pull with palms facing you, emphasizing biceps.',
+            pullUp: 'Vertical pull with palms away, focusing on back and lats.',
+            widePullUp: 'Pull-ups with wide grip to target outer lats.',
+            lSitPullUp: 'Pull-ups while holding legs extended horizontally.',
+            archPullUp: 'One arm moves outward during the pull for varied resistance.',
+            typeWriter: 'Horizontal sliding movement at the top of a pull-up.',
+            clappingPull: 'Explosive pull-ups with a momentary release to clap.',
+            muscleUp: 'Pull-up transitioning over the bar into a dip.',
+            oneArmPull: 'Pull-up performed with only one arm.',
+            frontLeverPull: 'Pulling while maintaining a horizontal body position.',
+            oneArmMuscleUp: 'Single-arm transition from below to above the bar.',
+            
+            // LEGS exercises
+            assistSquat: 'Supported squats to learn proper form and build initial strength.',
+            squat: 'Basic squatting movement targeting quads, hamstrings, and glutes.',
+            lunge: 'Step forward into a split stance, targeting legs individually.',
+            sideLunge: 'Lateral movement targeting inner and outer thighs.',
+            calfRaise: 'Rising onto toes to strengthen calf muscles.',
+            bulgarianSquat: 'Single-leg squat with rear foot elevated for increased difficulty.',
+            jumpSquat: 'Explosive squats with a jump at the top for power development.',
+            deepSquat: 'Full-range squats going below parallel for mobility and strength.',
+            walljumpSquat: 'Side-to-side squats working hip mobility and leg strength.',
+            singleLegCalfRaise: 'Calf raises on one leg for increased resistance.',
+            singleLegBridge: 'Hip raise using one leg to target glutes and hamstrings.',
+            shrimpsquat: 'Single-leg squat with non-working leg held behind.',
+            pistolSquat: 'One-legged squat with other leg extended forward.',
+            naturalLegExt: 'Kneeling exercise focusing on quadriceps strength.',
+            deepPistolSquat: 'Full-range pistol squat with extra depth and control.',
+            
+            // CORE exercises
+            deadBug: 'Core stability exercise with opposite arm and leg movements.',
+            plank: 'Holding a push-up position on forearms to build core endurance.',
+            kneeRaise: 'Lifting knees toward chest while hanging or supported.',
+            mountainClimber: 'Dynamic plank with alternating knee drives to chest.',
+            windshieldWiper: 'Rotating legs side to side while lying on back.',
+            sidePlank: 'Lateral core exercise balancing on one forearm and foot edge.',
+            legRaise: 'Lifting straight legs while hanging to target lower abs.',
+            hollowHold: 'Holding body in a curved dish position for core compression.',
+            lsit: 'Holding body supported with legs extended forward horizontally.',
+            abWheel: 'Rolling device used for intense core stability training.',
+            dragonFlag: 'Advanced core exercise keeping body rigid while pivoting from shoulders.',
+            backLever: 'Horizontal hold facing down, suspended from a bar.',
+            frontLever: 'Horizontal hold facing up, suspended from a bar.',
+            vSit: 'Advanced L-sit with legs raised higher in a V shape.',
+            manna: 'Elite gymnastic hold with legs extended forward beyond hands.',
+            
+            // MOBILITY exercises
+            neckRotation: 'Gentle circular movements to release neck tension.',
+            wristMob: 'Wrist movements in all directions for hand support preparation.',
+            shoulderMob: 'Movements to improve shoulder joint range of motion.',
+            thoracicRotation: 'Rotational movements targeting the middle back.',
+            catCow: 'Alternating between arching and rounding the spine.',
+            hipMob: 'Movements to improve hip joint mobility in all directions.',
+            butterflyStretch: 'Seated stretch for inner thighs and hips.',
+            spinalFlex: 'Various movements to improve spinal mobility.',
+            ankleMob: 'Ankle movements to improve squatting and balance.',
+            germanHang: 'Shoulder extension stretch used for advanced gymnastics preparation.',
+            chestStretch: 'Stretches to open the chest and counteract pushing tightness.',
+            pancake: 'Wide-legged forward fold for hip and hamstring flexibility.',
+            frontSplit: 'Forward and backward leg split for hamstring and hip flexor flexibility.',
+            middleSplit: 'Lateral leg split for adductor and hip flexibility.',
+            bridgeStretch: 'Back bend with hands and feet on floor for spine and shoulder mobility.',
+            
+            // SKILLS exercises
+            ctw: 'Crow pose with feet touching wall for support while learning.',
+            crow: 'Arm balance with knees resting on backs of arms.',
+            lsit: 'Fundamental gymnastics position holding legs straight out in front.',
+            frogstand: 'Basic hand balance with knees resting on elbows.',
+            wallHandstand: 'Inverted position using wall for support.',
+            handstand: 'Free-standing vertical balance on hands.',
+            straddle: 'Planche variation with legs spread wide.',
+            tuckedPlanche: 'Horizontal body hold with knees tucked to chest.',
+            advTuckPlanche: 'Tuck planche with legs extended slightly forward.',
+            humanFlag: 'Lateral body hold on a vertical pole.',
+            backLever: 'Horizontal body position facing downward.',
+            frontLever: 'Horizontal body position facing upward.',
+            planche: 'Horizontal body hold supported only by straight arms.',
+            icarusCross: 'Advanced gymnastic position combining cross and planche elements.',
+            victorianCross: 'Extremely advanced hold with arms behind body in cross position.'
         };
         return descriptions[exerciseId] || 'This exercise focuses on building functional strength through proper form and progression.';
     };
 
-    // Get exercise tips - simplified for demo
+    // Get exercise tips for all exercises
     const getExerciseTips = (exerciseId) => {
         const tips = {
+            // PUSH exercises
+            inclinePushUp: ['Find stable elevated surface', 'Keep body straight', 'Lower chest to edge'],
+            kneelingPushUp: ['Maintain straight line from knees to head', 'Keep core engaged', 'Full range of motion'],
             pushUp: ['Keep body in a straight line', 'Lower until chest nearly touches ground', 'Keep elbows at about 45°'],
-            widePushUp: ['Engage your core to maintain stability', 'Lower chest to just above the ground', 'Keep elbows flared properly'],
-            // More tips would be added here
+            widePushUp: ['Hands wider than shoulders', 'Keep elbows tracking over wrists', 'Engage chest muscles'],
+            declinePushUp: ['Elevate feet on stable surface', 'Keep core tight', 'Control the movement'],
+            diamondPushUp: ['Form diamond with hands', 'Keep elbows close to body', 'Focus on triceps'],
+            pseudoPlanche: ['Fingers point to feet', 'Lean forward', 'Keep shoulders depressed'],
+            pikePushUp: ['Form an inverted V', 'Keep head between arms', 'Focus on shoulders'],
+            wallHsPushUp: ['Maintain alignment', 'Control the descent', 'Push through full range'],
+            archPushUp: ['Extend one arm out', 'Keep core stable', 'Alternate sides'],
+            ringPushUp: ['Stabilize the rings', 'Keep wrists straight', 'Control the movement'],
+            handstandPushUp: ['Maintain vertical alignment', 'Lower with control', 'Press strongly'],
+            oneArmPushup: ['Widen feet for balance', 'Turn body slightly', 'Control the movement'],
+            planchePushUp: ['Maintain body position', 'Protract shoulders', 'Press with control'],
+            maltese: ['Build prerequisite strength', 'Use assistance if needed', 'Focus on shoulder depression'],
+            
+            // PULL exercises
+            scapulaPull: ['Engage shoulder blades', 'Pull down and together', 'Hold briefly at bottom'],
+            activeHang: ['Shoulders away from ears', 'Create full-body tension', 'Practice controlled breathing'],
+            negPullUp: ['Start at top position', 'Lower slowly (3-5 seconds)', 'Control the descent'],
+            australianPull: ['Keep body straight', 'Pull chest to bar', 'Lower with control'],
+            chinUp: ['Palms face toward you', 'Pull to chin over bar', 'Engage biceps and back'],
+            pullUp: ['Palms face away', 'Pull chest to bar', 'Avoid swinging'],
+            widePullUp: ['Wide grip', 'Focus on lats', 'Pull with controlled movement'],
+            lSitPullUp: ['Keep legs at 90°', 'Maintain position throughout', 'Pull with power'],
+            archPullUp: ['Extend one arm at top', 'Keep tension', 'Control movement speed'],
+            typeWriter: ['Pull up then slide across', 'Maintain height', 'Keep shoulders engaged'],
+            clappingPull: ['Pull explosively', 'Clap quickly', 'Catch safely'],
+            muscleUp: ['Use false grip', 'Pull explosively', 'Transition smoothly'],
+            oneArmPull: ['Minimal assistance', 'Keep body stable', 'Build with negatives first'],
+            frontLeverPull: ['Maintain body position', 'Pull from lever to bar', 'Control the movement'],
+            oneArmMuscleUp: ['Master one-arm pull first', 'Use false grip', 'Practice transition separately'],
+            
+            // LEGS exercises
+            assistSquat: ['Use support only for balance', 'Weight in heels', 'Keep back neutral'],
+            squat: ['Feet shoulder-width', 'Knees track over toes', 'Hips below parallel'],
+            lunge: ['Step forward with control', 'Front knee over ankle', 'Drive through heel'],
+            sideLunge: ['Step wide to side', 'Keep toes forward', 'Sit back and down'],
+            calfRaise: ['Rise fully onto balls of feet', 'Lower heels below level', 'Keep legs straight'],
+            bulgarianSquat: ['Elevate rear foot', 'Keep front foot flat', 'Upright torso'],
+            jumpSquat: ['Land softly', 'Bend knees to absorb', 'Explode upward'],
+            deepSquat: ['Keep heels down', 'Maintain neutral spine', 'Go below parallel'],
+            walljumpSquat: ['Wide stance', 'Shift weight side to side', 'Keep chest up'],
+            singleLegCalfRaise: ['Light support for balance', 'Full range of motion', 'Control the movement'],
+            singleLegBridge: ['Shoulders on ground', 'Extend non-working leg', 'Squeeze glutes at top'],
+            shrimpsquat: ['Hold rear foot', 'Control the descent', 'Keep chest up'],
+            pistolSquat: ['Arms forward for balance', 'Keep heel down', 'Control the movement'],
+            naturalLegExt: ['Kneel on soft surface', 'Maintain straight body', 'Use hands if needed'],
+            deepPistolSquat: ['Full range of motion', 'Keep heel planted', 'Rise without momentum'],
+            
+            // CORE exercises
+            deadBug: ['Press lower back to floor', 'Extend opposite limbs', 'Breathe normally'],
+            plank: ['Straight line head to heels', 'Shoulders over elbows', 'Engage core fully'],
+            kneeRaise: ['Avoid swinging', 'Lift knees to chest', 'Lower with control'],
+            mountainClimber: ['Keep hips level', 'Drive knees to chest', 'Maintain plank position'],
+            windshieldWiper: ['Keep shoulders down', 'Control the movement', 'Engage obliques'],
+            sidePlank: ['Stack feet or stagger', 'Keep body straight', 'Lift free arm for challenge'],
+            legRaise: ['Keep legs straight', 'Avoid swinging', 'Control the lowering'],
+            hollowHold: ['Lower back to floor', 'Adjust limb height for difficulty', 'Keep breathing'],
+            lsit: ['Push shoulders down', 'Keep legs straight', 'Breathe despite compression'],
+            abWheel: ['Start on knees', 'Slight arch in lower back', 'Roll out only as far as controllable'],
+            dragonFlag: ['Support upper body', 'Keep body rigid', 'Lower with control'],
+            backLever: ['Start with tuck position', 'Keep arms straight', 'Maintain body tension'],
+            frontLever: ['Begin with tuck', 'Pull shoulder blades together', 'Straighten body gradually'],
+            vSit: ['Press hands down', 'Lean back slightly', 'Lift legs higher than L-sit'],
+            manna: ['Master L-sit first', 'Lean forward', 'Press strongly with straight arms'],
+            
+            // MOBILITY exercises
+            neckRotation: ['Move slowly', 'Avoid pain', 'Breathe deeply'],
+            wristMob: ['Move in all directions', 'Apply gentle pressure', 'Do before hand balancing'],
+            shoulderMob: ['Include all movement planes', 'Start small, increase range', 'Regular practice'],
+            thoracicRotation: ['Keep hips stable', 'Rotate from middle back', 'Use arm positions to enhance'],
+            catCow: ['Follow your breath', 'Move segment by segment', 'Keep wrists aligned'],
+            hipMob: ['Move in all directions', 'Find tight spots', 'Consistent practice'],
+            butterflyStretch: ['Sit tall', 'Gentle knee pressure', 'Lean forward for intensity'],
+            spinalFlex: ['Move with breath', 'Include all directions', 'Keep movements controlled'],
+            ankleMob: ['Focus on dorsiflexion', 'Include rotations', 'Weight-bearing when ready'],
+            germanHang: ['Support with feet', 'Open chest', 'Build time gradually'],
+            chestStretch: ['Use doorway or wall', 'Keep shoulders down', 'Try different angles'],
+            pancake: ['Sit with wide legs', 'Knees up', 'Fold from hips'],
+            frontSplit: ['Square hips', 'Lower slowly', 'Back knee pointing down'],
+            middleSplit: ['Toes up or slightly out', 'Support with hands', 'Keep pelvis neutral'],
+            bridgeStretch: ['Push through arms', 'Feet hip-width', 'Work toward straight arms'],
+            
+            // SKILLS exercises
+            ctw: ['Hands shoulder-width', 'Knees on arms', 'Toes touch wall'],
+            crow: ['Spread fingers wide', 'Look slightly forward', 'Engage core'],
+            lsit: ['Push shoulders down', 'Straighten legs', 'Start on raised surface if needed'],
+            frogstand: ['Bent elbows', 'Knees on upper arms', 'Look at floor ahead'],
+            wallHandstand: ['Straight arms', 'Find balance point', 'Work on endurance'],
+            handstand: ['Stack joints vertically', 'Engaged body', 'Small finger adjustments'],
+            straddle: ['Lean forward', 'Wide legs', 'Protract shoulders'],
+            tuckedPlanche: ['Lock elbows', 'Tight tuck', 'Strong shoulder protraction'],
+            advTuckPlanche: ['Extend knees slightly', 'Maintain shoulder position', 'Hips at hand level'],
+            humanFlag: ['Staggered grip', 'Push-pull opposition', 'Start with tuck'],
+            backLever: ['Progressive tuck positions', 'Straight arms', 'Full body tension'],
+            frontLever: ['Build with tuck first', 'Straight arms', 'Engaged lats'],
+            planche: ['Progress systematically', 'Strong protraction', 'Hollow body position'],
+            icarusCross: ['Master prerequisites', 'Specific conditioning', 'Assisted practice'],
+            victorianCross: ['Extreme pressing strength', 'Specific training', 'Band assistance']
         };
         return tips[exerciseId] || ['Maintain proper form', 'Focus on controlled movement', 'Breathe steadily throughout'];
     };
