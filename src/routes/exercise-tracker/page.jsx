@@ -1,28 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dumbbell } from "lucide-react";
 
 const ExerciseTrackerPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     
-    // Add effect to increase the page height by modifying the layout container
-    useEffect(() => {
-        // Target the parent layout container to give it more height
-        const layoutContainer = document.querySelector('.h-\\[calc\\(100vh-60px\\)\\]');
-        if (layoutContainer) {
-            layoutContainer.style.height = 'calc(100vh - 30px)';
-            layoutContainer.style.maxHeight = 'none';
-            // Reset when component unmounts
-            return () => {
-                layoutContainer.style.height = 'calc(100vh - 60px)';
-                layoutContainer.style.maxHeight = '';
-            };
-        }
-    }, []);
-    
     return (
-        <div className="flex flex-col gap-y-4 h-full">
-            {/* Header - minimized for more space */}
-            <div className="flex items-center mb-1">
+        <div className="flex flex-col gap-y-4">
+            {/* Header */}
+            <div className="flex items-center mb-2">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1e628c] text-white">
                         <Dumbbell size={20} />
@@ -34,8 +19,8 @@ const ExerciseTrackerPage = () => {
                 </div>
             </div>
             
-            {/* Embedded Tracker with maximized height */}
-            <div className="relative bg-white rounded-lg shadow-sm overflow-hidden h-[calc(100vh-80px)] min-h-[900px] flex-grow">
+            {/* Embedded Tracker without border */}
+            <div className="relative bg-white rounded-lg shadow-sm overflow-hidden h-[calc(100vh-150px)]">
                 {/* Loading State */}
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
@@ -43,7 +28,7 @@ const ExerciseTrackerPage = () => {
                     </div>
                 )}
                 
-                {/* Maximized height iframe container */}
+                {/* Fixed height iframe container to prevent main page scrolling */}
                 <div className="w-full h-full">
                     <iframe 
                         src="https://exercise-tracker-tau.vercel.app" 
