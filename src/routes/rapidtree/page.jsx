@@ -285,8 +285,10 @@ const RapidTreePage = () => {
         const nextExerciseIndex = index + 1;
         const hasNextExercise = nextExerciseIndex < exercises[category].length;
         
-        // Can reset if there's no next exercise OR if the next exercise is unlocked
-        return !hasNextExercise || (hasNextExercise && !exercises[category][nextExerciseIndex].isLocked);
+        // Can reset if there's no next exercise OR if the next exercise is unlocked but NOT completed
+        return !hasNextExercise || (hasNextExercise && 
+            !exercises[category][nextExerciseIndex].isLocked && 
+            !exercises[category][nextExerciseIndex].isCompleted);
     };
 
     // Get exercise description - simplified for demo
