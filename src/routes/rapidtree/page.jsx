@@ -3,115 +3,129 @@ import { Footer } from "@/layouts/footer";
 import { X, Info, CheckCircle, Lock } from "lucide-react";
 import { cn } from "@/utils/cn";
 
-// Exercise data organized by categories (imported from the uploaded files)
-const exerciseCategories = {
-    push: [
-        { id: 'inclinePushUp', title: 'Incline Push-Ups', icon: 'IP', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'kneelingPushUp', title: 'Kneeling Push-Ups', icon: 'KP', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'pushUp', title: 'Regular Push-Ups', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'widePushUp', title: 'Wide Push-Ups', icon: 'W', level: 'Beginner-Int', isCompleted: false, isLocked: true },
-        { id: 'declinePushUp', title: 'Decline Push-Ups', icon: 'DP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
-        { id: 'diamondPushUp', title: 'Diamond Push-Ups', icon: 'D', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'pseudoPlanche', title: 'Pseudo Planche Push-Ups', icon: 'PP', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'pikePushUp', title: 'Pike Push-Ups', icon: 'PK', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'wallHsPushUp', title: 'Wall Handstand Push-Ups', icon: 'WH', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'archPushUp', title: 'Archer Push-Ups', icon: 'AP', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'ringPushUp', title: 'Ring Push-Ups', icon: 'RP', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'handstandPushUp', title: 'Handstand Push-Ups', icon: 'HS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'oneArmPushup', title: 'One-Arm Push-Ups', icon: 'OA', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'planchePushUp', title: 'Planche Push-Ups', icon: 'PL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'maltese', title: 'Maltese Push-Ups', icon: 'M', level: 'Elite', isCompleted: false, isLocked: true }
-    ],
-    pull: [
-        { id: 'scapulaPull', title: 'Scapula Pulls', icon: 'SC', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'activeHang', title: 'Active Hangs', icon: 'AH', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'negPullUp', title: 'Negative Pull-Ups', icon: 'NP', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'australianPull', title: 'Australian Pull-Ups', icon: 'AU', level: 'Beginner-Int', isCompleted: false, isLocked: true },
-        { id: 'chinUp', title: 'Chin-Ups', icon: 'C', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'pullUp', title: 'Pull-Ups', icon: 'P', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'widePullUp', title: 'Wide-Grip Pull-Ups', icon: 'WP', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'lSitPullUp', title: 'L-Sit Pull-Ups', icon: 'LP', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'archPullUp', title: 'Archer Pull-Ups', icon: 'A', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'typeWriter', title: 'Typewriter Pull-Ups', icon: 'TW', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'clappingPull', title: 'Clapping Pull-Ups', icon: 'CP', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'muscleUp', title: 'Muscle-Ups', icon: 'MU', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'oneArmPull', title: 'One-Arm Pull-Ups', icon: 'OA', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'frontLeverPull', title: 'Front Lever Pull-Ups', icon: 'FL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'oneArmMuscleUp', title: 'One-Arm Muscle-Up', icon: 'OM', level: 'Elite', isCompleted: false, isLocked: true }
-    ],
-    legs: [
-        { id: 'assistSquat', title: 'Assisted Squats', icon: 'AS', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'squat', title: 'Air Squats', icon: 'S', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'lunge', title: 'Forward Lunges', icon: 'L', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'sideLunge', title: 'Side Lunges', icon: 'SL', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'calfRaise', title: 'Calf Raises', icon: 'CR', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'bulgarianSquat', title: 'Bulgarian Split Squats', icon: 'BS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'jumpSquat', title: 'Jump Squats', icon: 'JS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'deepSquat', title: 'Deep Squats', icon: 'DS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'walljumpSquat', title: 'Cossack Squats', icon: 'CS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'singleLegCalfRaise', title: 'Single-Leg Calf Raises', icon: 'SC', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'singleLegBridge', title: 'Single-Leg Bridges', icon: 'SB', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'shrimpsquat', title: 'Shrimp Squats', icon: 'SS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'pistolSquat', title: 'Pistol Squats', icon: 'PS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'naturalLegExt', title: 'Natural Leg Extensions', icon: 'NL', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'deepPistolSquat', title: 'Deep Pistol Squats', icon: 'DP', level: 'Elite', isCompleted: false, isLocked: true }
-    ],
-    core: [
-        { id: 'deadBug', title: 'Dead Bug', icon: 'DB', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'plank', title: 'Plank', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'kneeRaise', title: 'Knee Raises', icon: 'KR', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'mountainClimber', title: 'Mountain Climbers', icon: 'MC', level: 'Beginner', isCompleted: false, isLocked: true },
-        { id: 'windshieldWiper', title: 'Windshield Wipers', icon: 'WW', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'sidePlank', title: 'Side Plank', icon: 'SP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
-        { id: 'legRaise', title: 'Hanging Leg Raises', icon: 'LR', level: 'Beginner-Int', isCompleted: false, isLocked: true },
-        { id: 'hollowHold', title: 'Hollow Body Hold', icon: 'HH', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'lsit', title: 'L-Sit', icon: 'LS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'abWheel', title: 'Ab Wheel Rollout', icon: 'AW', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'dragonFlag', title: 'Dragon Flag', icon: 'DF', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'backLever', title: 'Back Lever', icon: 'BL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'frontLever', title: 'Front Lever', icon: 'FL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'vSit', title: 'V-Sit', icon: 'VS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'manna', title: 'Manna', icon: 'MA', level: 'Elite', isCompleted: false, isLocked: true }
-    ],
-    mobility: [
-        { id: 'neckRotation', title: 'Neck Rotations', icon: 'NR', level: 'All Levels', isCompleted: false, isLocked: false },
-        { id: 'wristMob', title: 'Wrist Mobility', icon: 'WM', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'shoulderMob', title: 'Shoulder Mobility', icon: 'SM', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'thoracicRotation', title: 'Thoracic Rotations', icon: 'TR', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'catCow', title: 'Cat-Cow Stretch', icon: 'CC', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'hipMob', title: 'Hip Mobility', icon: 'HM', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'butterflyStretch', title: 'Butterfly Stretch', icon: 'BS', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'spinalFlex', title: 'Spinal Flexibility', icon: 'SF', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'ankleMob', title: 'Ankle Mobility', icon: 'AM', level: 'All Levels', isCompleted: false, isLocked: true },
-        { id: 'germanHang', title: 'German Hang', icon: 'GH', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'chestStretch', title: 'Deep Chest Stretch', icon: 'CS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'pancake', title: 'Pancake Stretch', icon: 'PS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'frontSplit', title: 'Front Split', icon: 'FS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'middleSplit', title: 'Middle Split', icon: 'MS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'bridgeStretch', title: 'Full Bridge', icon: 'FB', level: 'Advanced', isCompleted: false, isLocked: true }
-    ],
-    skills: [
-        { id: 'ctw', title: 'Crow to Wall', icon: 'CW', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'crow', title: 'Crow Pose', icon: 'CP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
-        { id: 'lsit', title: 'L-Sit', icon: 'LS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'frogstand', title: 'Frog Stand', icon: 'FS', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'wallHandstand', title: 'Wall Handstand', icon: 'WH', level: 'Intermediate', isCompleted: false, isLocked: true },
-        { id: 'handstand', title: 'Free Handstand', icon: 'HS', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'straddle', title: 'Straddle Planche', icon: 'SP', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'tuckedPlanche', title: 'Tuck Planche', icon: 'TP', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'advTuckPlanche', title: 'Advanced Tuck Planche', icon: 'AT', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'humanFlag', title: 'Human Flag', icon: 'HF', level: 'Advanced', isCompleted: false, isLocked: true },
-        { id: 'backLever', title: 'Back Lever', icon: 'BL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'frontLever', title: 'Front Lever', icon: 'FL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'planche', title: 'Full Planche', icon: 'PL', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'icarusCross', title: 'Icarus Cross', icon: 'IC', level: 'Elite', isCompleted: false, isLocked: true },
-        { id: 'victorianCross', title: 'Victorian Cross', icon: 'VC', level: 'Elite', isCompleted: false, isLocked: true }
-    ]
+// Initialize exercise categories with only first item unlocked
+const initializeExerciseCategories = () => {
+    const categories = {
+        push: [
+            { id: 'inclinePushUp', title: 'Incline Push-Ups', icon: 'IP', level: 'Beginner', isCompleted: false, isLocked: false },
+            { id: 'kneelingPushUp', title: 'Kneeling Push-Ups', icon: 'KP', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'pushUp', title: 'Regular Push-Ups', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'widePushUp', title: 'Wide Push-Ups', icon: 'W', level: 'Beginner-Int', isCompleted: false, isLocked: true },
+            { id: 'declinePushUp', title: 'Decline Push-Ups', icon: 'DP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
+            { id: 'diamondPushUp', title: 'Diamond Push-Ups', icon: 'D', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'pseudoPlanche', title: 'Pseudo Planche Push-Ups', icon: 'PP', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'pikePushUp', title: 'Pike Push-Ups', icon: 'PK', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'wallHsPushUp', title: 'Wall Handstand Push-Ups', icon: 'WH', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'archPushUp', title: 'Archer Push-Ups', icon: 'AP', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'ringPushUp', title: 'Ring Push-Ups', icon: 'RP', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'handstandPushUp', title: 'Handstand Push-Ups', icon: 'HS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'oneArmPushup', title: 'One-Arm Push-Ups', icon: 'OA', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'planchePushUp', title: 'Planche Push-Ups', icon: 'PL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'maltese', title: 'Maltese Push-Ups', icon: 'M', level: 'Elite', isCompleted: false, isLocked: true }
+        ],
+        pull: [
+            { id: 'scapulaPull', title: 'Scapula Pulls', icon: 'SC', level: 'Beginner', isCompleted: false, isLocked: false },
+            { id: 'activeHang', title: 'Active Hangs', icon: 'AH', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'negPullUp', title: 'Negative Pull-Ups', icon: 'NP', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'australianPull', title: 'Australian Pull-Ups', icon: 'AU', level: 'Beginner-Int', isCompleted: false, isLocked: true },
+            { id: 'chinUp', title: 'Chin-Ups', icon: 'C', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'pullUp', title: 'Pull-Ups', icon: 'P', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'widePullUp', title: 'Wide-Grip Pull-Ups', icon: 'WP', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'lSitPullUp', title: 'L-Sit Pull-Ups', icon: 'LP', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'archPullUp', title: 'Archer Pull-Ups', icon: 'A', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'typeWriter', title: 'Typewriter Pull-Ups', icon: 'TW', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'clappingPull', title: 'Clapping Pull-Ups', icon: 'CP', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'muscleUp', title: 'Muscle-Ups', icon: 'MU', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'oneArmPull', title: 'One-Arm Pull-Ups', icon: 'OA', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'frontLeverPull', title: 'Front Lever Pull-Ups', icon: 'FL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'oneArmMuscleUp', title: 'One-Arm Muscle-Up', icon: 'OM', level: 'Elite', isCompleted: false, isLocked: true }
+        ],
+        legs: [
+            { id: 'assistSquat', title: 'Assisted Squats', icon: 'AS', level: 'Beginner', isCompleted: false, isLocked: false },
+            { id: 'squat', title: 'Air Squats', icon: 'S', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'lunge', title: 'Forward Lunges', icon: 'L', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'sideLunge', title: 'Side Lunges', icon: 'SL', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'calfRaise', title: 'Calf Raises', icon: 'CR', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'bulgarianSquat', title: 'Bulgarian Split Squats', icon: 'BS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'jumpSquat', title: 'Jump Squats', icon: 'JS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'deepSquat', title: 'Deep Squats', icon: 'DS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'walljumpSquat', title: 'Cossack Squats', icon: 'CS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'singleLegCalfRaise', title: 'Single-Leg Calf Raises', icon: 'SC', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'singleLegBridge', title: 'Single-Leg Bridges', icon: 'SB', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'shrimpsquat', title: 'Shrimp Squats', icon: 'SS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'pistolSquat', title: 'Pistol Squats', icon: 'PS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'naturalLegExt', title: 'Natural Leg Extensions', icon: 'NL', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'deepPistolSquat', title: 'Deep Pistol Squats', icon: 'DP', level: 'Elite', isCompleted: false, isLocked: true }
+        ],
+        core: [
+            { id: 'deadBug', title: 'Dead Bug', icon: 'DB', level: 'Beginner', isCompleted: false, isLocked: false },
+            { id: 'plank', title: 'Plank', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'kneeRaise', title: 'Knee Raises', icon: 'KR', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'mountainClimber', title: 'Mountain Climbers', icon: 'MC', level: 'Beginner', isCompleted: false, isLocked: true },
+            { id: 'windshieldWiper', title: 'Windshield Wipers', icon: 'WW', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'sidePlank', title: 'Side Plank', icon: 'SP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
+            { id: 'legRaise', title: 'Hanging Leg Raises', icon: 'LR', level: 'Beginner-Int', isCompleted: false, isLocked: true },
+            { id: 'hollowHold', title: 'Hollow Body Hold', icon: 'HH', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'lsit', title: 'L-Sit', icon: 'LS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'abWheel', title: 'Ab Wheel Rollout', icon: 'AW', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'dragonFlag', title: 'Dragon Flag', icon: 'DF', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'backLever', title: 'Back Lever', icon: 'BL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'frontLever', title: 'Front Lever', icon: 'FL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'vSit', title: 'V-Sit', icon: 'VS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'manna', title: 'Manna', icon: 'MA', level: 'Elite', isCompleted: false, isLocked: true }
+        ],
+        mobility: [
+            { id: 'neckRotation', title: 'Neck Rotations', icon: 'NR', level: 'All Levels', isCompleted: false, isLocked: false },
+            { id: 'wristMob', title: 'Wrist Mobility', icon: 'WM', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'shoulderMob', title: 'Shoulder Mobility', icon: 'SM', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'thoracicRotation', title: 'Thoracic Rotations', icon: 'TR', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'catCow', title: 'Cat-Cow Stretch', icon: 'CC', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'hipMob', title: 'Hip Mobility', icon: 'HM', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'butterflyStretch', title: 'Butterfly Stretch', icon: 'BS', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'spinalFlex', title: 'Spinal Flexibility', icon: 'SF', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'ankleMob', title: 'Ankle Mobility', icon: 'AM', level: 'All Levels', isCompleted: false, isLocked: true },
+            { id: 'germanHang', title: 'German Hang', icon: 'GH', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'chestStretch', title: 'Deep Chest Stretch', icon: 'CS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'pancake', title: 'Pancake Stretch', icon: 'PS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'frontSplit', title: 'Front Split', icon: 'FS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'middleSplit', title: 'Middle Split', icon: 'MS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'bridgeStretch', title: 'Full Bridge', icon: 'FB', level: 'Advanced', isCompleted: false, isLocked: true }
+        ],
+        skills: [
+            { id: 'ctw', title: 'Crow to Wall', icon: 'CW', level: 'Beginner', isCompleted: false, isLocked: false },
+            { id: 'crow', title: 'Crow Pose', icon: 'CP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
+            { id: 'lsit', title: 'L-Sit', icon: 'LS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'frogstand', title: 'Frog Stand', icon: 'FS', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'wallHandstand', title: 'Wall Handstand', icon: 'WH', level: 'Intermediate', isCompleted: false, isLocked: true },
+            { id: 'handstand', title: 'Free Handstand', icon: 'HS', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'straddle', title: 'Straddle Planche', icon: 'SP', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'tuckedPlanche', title: 'Tuck Planche', icon: 'TP', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'advTuckPlanche', title: 'Advanced Tuck Planche', icon: 'AT', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'humanFlag', title: 'Human Flag', icon: 'HF', level: 'Advanced', isCompleted: false, isLocked: true },
+            { id: 'backLever', title: 'Back Lever', icon: 'BL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'frontLever', title: 'Front Lever', icon: 'FL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'planche', title: 'Full Planche', icon: 'PL', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'icarusCross', title: 'Icarus Cross', icon: 'IC', level: 'Elite', isCompleted: false, isLocked: true },
+            { id: 'victorianCross', title: 'Victorian Cross', icon: 'VC', level: 'Elite', isCompleted: false, isLocked: true }
+        ]
+    };
+
+    // Ensure only the first exercise in each category is unlocked
+    Object.keys(categories).forEach(category => {
+        if (categories[category].length > 0) {
+            categories[category][0].isLocked = false;
+            for (let i = 1; i < categories[category].length; i++) {
+                categories[category][i].isLocked = true;
+            }
+        }
+    });
+
+    return categories;
 };
 
 const RapidTreePage = () => {
     const [activeCategory, setActiveCategory] = useState('push');
-    const [exercises, setExercises] = useState({...exerciseCategories});
+    const [exercises, setExercises] = useState(initializeExerciseCategories());
     const [selectedExercise, setSelectedExercise] = useState(null);
     const [totalProgress, setTotalProgress] = useState(0);
 
@@ -139,17 +153,40 @@ const RapidTreePage = () => {
         if (savedProgress) {
             try {
                 const parsedProgress = JSON.parse(savedProgress);
-                const updatedExercises = {...exercises};
+                const updatedExercises = initializeExerciseCategories(); // Start with a fresh copy
 
                 Object.keys(parsedProgress).forEach(category => {
                     if (updatedExercises[category]) {
+                        // First, apply the completion status
                         parsedProgress[category].forEach(savedExercise => {
                             const index = updatedExercises[category].findIndex(ex => ex.id === savedExercise.id);
                             if (index !== -1) {
                                 updatedExercises[category][index].isCompleted = savedExercise.isCompleted;
-                                updatedExercises[category][index].isLocked = savedExercise.isLocked;
                             }
                         });
+
+                        // Then, ensure correct unlocking based on completion
+                        for (let i = 0; i < updatedExercises[category].length; i++) {
+                            // First exercise is always unlocked
+                            if (i === 0) {
+                                updatedExercises[category][i].isLocked = false;
+                                continue;
+                            }
+
+                            // If previous exercise is completed, unlock this one
+                            if (updatedExercises[category][i-1].isCompleted) {
+                                updatedExercises[category][i].isLocked = false;
+                            } else {
+                                updatedExercises[category][i].isLocked = true;
+                                // Lock all subsequent exercises
+                                for (let j = i+1; j < updatedExercises[category].length; j++) {
+                                    if (!updatedExercises[category][j].isCompleted) {
+                                        updatedExercises[category][j].isLocked = true;
+                                    }
+                                }
+                                break;
+                            }
+                        }
                     }
                 });
 
@@ -202,45 +239,54 @@ const RapidTreePage = () => {
         saveProgress();
     };
 
-    // Reset exercise completion - modified to only allow if next exercise is unlocked
+    // Reset exercise completion
     const resetExercise = (category, exerciseId) => {
         const updatedExercises = {...exercises};
         const index = updatedExercises[category].findIndex(ex => ex.id === exerciseId);
 
         if (index === -1) return;
         
-        // Check if next exercise exists and is unlocked before allowing reset
-        const nextExerciseExists = index + 1 < updatedExercises[category].length;
-        const nextExerciseUnlocked = nextExerciseExists && !updatedExercises[category][index + 1].isLocked;
+        // Check if this exercise can be reset
+        const nextExerciseIndex = index + 1;
+        const hasNextExercise = nextExerciseIndex < updatedExercises[category].length;
         
-        // Only allow reset if next exercise is unlocked
-        if (!nextExerciseUnlocked) {
-            setSelectedExercise(null);
-            return;
-        }
-
-        updatedExercises[category][index].isCompleted = false;
-
-        // Re-lock subsequent exercises if they're not completed
-        const lockSubsequentExercises = (startIndex) => {
-            for (let i = startIndex + 1; i < updatedExercises[category].length; i++) {
-                if (!updatedExercises[category][i].isCompleted) {
-                    updatedExercises[category][i].isLocked = true;
-                } else {
-                    break; // Stop locking if we find a completed exercise
+        // Only allow reset if there's no next exercise OR if the next exercise is unlocked
+        if (!hasNextExercise || (hasNextExercise && !updatedExercises[category][nextExerciseIndex].isLocked)) {
+            updatedExercises[category][index].isCompleted = false;
+            
+            // If there is a next exercise and it's not completed, lock it
+            if (hasNextExercise && !updatedExercises[category][nextExerciseIndex].isCompleted) {
+                updatedExercises[category][nextExerciseIndex].isLocked = true;
+                
+                // Also lock all subsequent uncompleted exercises
+                for (let i = nextExerciseIndex + 1; i < updatedExercises[category].length; i++) {
+                    if (!updatedExercises[category][i].isCompleted) {
+                        updatedExercises[category][i].isLocked = true;
+                    } else {
+                        break; // Stop at first completed exercise
+                    }
                 }
             }
-        };
-
-        // Lock subsequent uncompleted exercises
-        if (index + 1 < updatedExercises[category].length && !updatedExercises[category][index + 1].isCompleted) {
-            updatedExercises[category][index + 1].isLocked = true;
-            lockSubsequentExercises(index + 1);
+            
+            setExercises(updatedExercises);
+            setSelectedExercise(null);
+            saveProgress();
+        } else {
+            // If reset is not allowed, just close the dialog
+            setSelectedExercise(null);
         }
+    };
 
-        setExercises(updatedExercises);
-        setSelectedExercise(null);
-        saveProgress();
+    // Check if an exercise can be reset
+    const canResetExercise = (category, exerciseId) => {
+        const index = exercises[category].findIndex(ex => ex.id === exerciseId);
+        if (index === -1) return false;
+        
+        const nextExerciseIndex = index + 1;
+        const hasNextExercise = nextExerciseIndex < exercises[category].length;
+        
+        // Can reset if there's no next exercise OR if the next exercise is unlocked
+        return !hasNextExercise || (hasNextExercise && !exercises[category][nextExerciseIndex].isLocked);
     };
 
     // Get exercise description - simplified for demo
@@ -386,32 +432,23 @@ const RapidTreePage = () => {
                             </div>
 
                             <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-                                {selectedExercise.isCompleted && (() => {
-                                    // Check if next exercise exists and is unlocked
-                                    const category = selectedExercise.category;
-                                    const index = exercises[category].findIndex(ex => ex.id === selectedExercise.id);
-                                    const nextExerciseExists = index + 1 < exercises[category].length;
-                                    const nextExerciseUnlocked = nextExerciseExists && !exercises[category][index + 1].isLocked;
-                                    
-                                    // Disable button if next exercise is locked
-                                    const canReset = nextExerciseUnlocked;
-                                    
-                                    return (
-                                        <button
-                                            onClick={() => canReset && resetExercise(selectedExercise.category, selectedExercise.id)}
-                                            className={cn(
-                                                "flex-1 rounded-lg py-2 text-center font-medium",
-                                                canReset 
-                                                    ? "bg-red-500 hover:bg-red-600 text-white" 
-                                                    : "bg-red-300 text-white cursor-not-allowed"
-                                            )}
-                                            disabled={!canReset}
-                                            title={!canReset ? "Cannot reset - next exercise is still locked" : ""}
-                                        >
-                                            Reset Progress
-                                        </button>
-                                    );
-                                })() || (
+                                {selectedExercise.isCompleted ? (
+                                    <button
+                                        onClick={() => resetExercise(selectedExercise.category, selectedExercise.id)}
+                                        className={cn(
+                                            "flex-1 rounded-lg py-2 text-center font-medium",
+                                            canResetExercise(selectedExercise.category, selectedExercise.id)
+                                                ? "bg-red-500 hover:bg-red-600 text-white" 
+                                                : "bg-red-300 text-white cursor-not-allowed"
+                                        )}
+                                        disabled={!canResetExercise(selectedExercise.category, selectedExercise.id)}
+                                        title={!canResetExercise(selectedExercise.category, selectedExercise.id) 
+                                            ? "Cannot reset - next exercise is still locked" 
+                                            : ""}
+                                    >
+                                        Reset Progress
+                                    </button>
+                                ) : (
                                     <button
                                         onClick={() => completeExercise(selectedExercise.category, selectedExercise.id)}
                                         className="flex-1 rounded-lg bg-[#1e628c] py-2 text-center font-medium text-white hover:bg-[#174e70]"
