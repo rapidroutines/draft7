@@ -124,6 +124,14 @@ const exercises = [
         difficulty: 2,
         image: "https://via.placeholder.com/300x180?text=Jump+Rope"
     }
+     {
+        id: 16,
+        title: "pseudo push up",
+        category: "calisthenics",
+        description: "An effective cardio exercise that improves coordination, rhythm, and endurance.",
+        difficulty: 2,
+        image: "https://via.placeholder.com/300x180?text=Jump+Rope"
+    }
 ];
 
 // Custom color variable for the requested blue shade
