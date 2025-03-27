@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Footer } from "@/layouts/footer";
-import { X, Info, CheckCircle, Lock } from "lucide-react";
+import { X, Info, CheckCircle, Lock, RefreshCw } from "lucide-react";
 import { cn } from "@/utils/cn";
 
 // Initialize exercise categories with only first item unlocked
@@ -311,9 +311,28 @@ const RapidTreePage = () => {
         return tips[exerciseId] || ['Maintain proper form', 'Focus on controlled movement', 'Breathe steadily throughout'];
     };
 
+    // Reset all exercises to initial state
+    const resetAllExercises = () => {
+        if (window.confirm("Are you sure you want to reset all progress? This cannot be undone.")) {
+            const freshExercises = initializeExerciseCategories();
+            setExercises(freshExercises);
+            setTotalProgress(0);
+            localStorage.removeItem('rapidTreeProgress');
+        }
+    };
+
     return (
         <div className="flex flex-col gap-y-6">
-            <h1 className="title">RapidTree Progression</h1>
+            <div className="flex justify-between items-center">
+                <h1 className="title">RapidTree Progression</h1>
+                <button 
+                    onClick={resetAllExercises}
+                    className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600"
+                    title="Reset all progress"
+                >
+                    <RefreshCw className="h-4 w-4" /> Reset All
+                </button>
+            </div>
 
             {/* Progress Bar */}
             <div className="w-full rounded-lg bg-slate-100 p-4 shadow-sm">
