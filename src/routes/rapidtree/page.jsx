@@ -7,7 +7,7 @@ import { cn } from "@/utils/cn";
 const exerciseCategories = {
     push: [
         { id: 'inclinePushUp', title: 'Incline Push-Ups', icon: 'IP', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'kneelingPushUp', title: 'Kneeling Push-Ups', icon: 'KP', level: 'Beginner', isCompleted: false, isLocked: false },
+        { id: 'kneelingPushUp', title: 'Kneeling Push-Ups', icon: 'KP', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'pushUp', title: 'Regular Push-Ups', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'widePushUp', title: 'Wide Push-Ups', icon: 'W', level: 'Beginner-Int', isCompleted: false, isLocked: true },
         { id: 'declinePushUp', title: 'Decline Push-Ups', icon: 'DP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
@@ -24,7 +24,7 @@ const exerciseCategories = {
     ],
     pull: [
         { id: 'scapulaPull', title: 'Scapula Pulls', icon: 'SC', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'activeHang', title: 'Active Hangs', icon: 'AH', level: 'Beginner', isCompleted: false, isLocked: false },
+        { id: 'activeHang', title: 'Active Hangs', icon: 'AH', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'negPullUp', title: 'Negative Pull-Ups', icon: 'NP', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'australianPull', title: 'Australian Pull-Ups', icon: 'AU', level: 'Beginner-Int', isCompleted: false, isLocked: true },
         { id: 'chinUp', title: 'Chin-Ups', icon: 'C', level: 'Intermediate', isCompleted: false, isLocked: true },
@@ -41,7 +41,7 @@ const exerciseCategories = {
     ],
     legs: [
         { id: 'assistSquat', title: 'Assisted Squats', icon: 'AS', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'squat', title: 'Air Squats', icon: 'S', level: 'Beginner', isCompleted: false, isLocked: false },
+        { id: 'squat', title: 'Air Squats', icon: 'S', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'lunge', title: 'Forward Lunges', icon: 'L', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'sideLunge', title: 'Side Lunges', icon: 'SL', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'calfRaise', title: 'Calf Raises', icon: 'CR', level: 'Beginner', isCompleted: false, isLocked: true },
@@ -58,7 +58,7 @@ const exerciseCategories = {
     ],
     core: [
         { id: 'deadBug', title: 'Dead Bug', icon: 'DB', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'plank', title: 'Plank', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: false },
+        { id: 'plank', title: 'Plank', icon: 'P', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'kneeRaise', title: 'Knee Raises', icon: 'KR', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'mountainClimber', title: 'Mountain Climbers', icon: 'MC', level: 'Beginner', isCompleted: false, isLocked: true },
         { id: 'windshieldWiper', title: 'Windshield Wipers', icon: 'WW', level: 'Intermediate', isCompleted: false, isLocked: true },
@@ -75,7 +75,7 @@ const exerciseCategories = {
     ],
     mobility: [
         { id: 'neckRotation', title: 'Neck Rotations', icon: 'NR', level: 'All Levels', isCompleted: false, isLocked: false },
-        { id: 'wristMob', title: 'Wrist Mobility', icon: 'WM', level: 'All Levels', isCompleted: false, isLocked: false },
+        { id: 'wristMob', title: 'Wrist Mobility', icon: 'WM', level: 'All Levels', isCompleted: false, isLocked: true },
         { id: 'shoulderMob', title: 'Shoulder Mobility', icon: 'SM', level: 'All Levels', isCompleted: false, isLocked: true },
         { id: 'thoracicRotation', title: 'Thoracic Rotations', icon: 'TR', level: 'All Levels', isCompleted: false, isLocked: true },
         { id: 'catCow', title: 'Cat-Cow Stretch', icon: 'CC', level: 'All Levels', isCompleted: false, isLocked: true },
@@ -92,7 +92,7 @@ const exerciseCategories = {
     ],
     skills: [
         { id: 'ctw', title: 'Crow to Wall', icon: 'CW', level: 'Beginner', isCompleted: false, isLocked: false },
-        { id: 'crow', title: 'Crow Pose', icon: 'CP', level: 'Beginner-Int', isCompleted: false, isLocked: false },
+        { id: 'crow', title: 'Crow Pose', icon: 'CP', level: 'Beginner-Int', isCompleted: false, isLocked: true },
         { id: 'lsit', title: 'L-Sit', icon: 'LS', level: 'Intermediate', isCompleted: false, isLocked: true },
         { id: 'frogstand', title: 'Frog Stand', icon: 'FS', level: 'Intermediate', isCompleted: false, isLocked: true },
         { id: 'wallHandstand', title: 'Wall Handstand', icon: 'WH', level: 'Intermediate', isCompleted: false, isLocked: true },
@@ -202,15 +202,24 @@ const RapidTreePage = () => {
         saveProgress();
     };
 
-    // Reset exercise completion
+    // Reset exercise completion - modified to only allow if next exercise is unlocked
     const resetExercise = (category, exerciseId) => {
         const updatedExercises = {...exercises};
         const index = updatedExercises[category].findIndex(ex => ex.id === exerciseId);
 
         if (index === -1) return;
+        
+        // Check if next exercise exists and is unlocked before allowing reset
+        const nextExerciseExists = index + 1 < updatedExercises[category].length;
+        const nextExerciseUnlocked = nextExerciseExists && !updatedExercises[category][index + 1].isLocked;
+        
+        // Only allow reset if next exercise is unlocked
+        if (!nextExerciseUnlocked) {
+            setSelectedExercise(null);
+            return;
+        }
 
         updatedExercises[category][index].isCompleted = false;
-        updatedExercises[category][index].isLocked = false;
 
         // Re-lock subsequent exercises if they're not completed
         const lockSubsequentExercises = (startIndex) => {
@@ -377,21 +386,39 @@ const RapidTreePage = () => {
                             </div>
 
                             <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-                                <button
-                                    onClick={() => 
-                                        selectedExercise.isCompleted 
-                                            ? resetExercise(selectedExercise.category, selectedExercise.id)
-                                            : completeExercise(selectedExercise.category, selectedExercise.id)
-                                    }
-                                    className={cn(
-                                        "flex-1 rounded-lg py-2 text-center font-medium text-white",
-                                        selectedExercise.isCompleted
-                                            ? "bg-red-500 hover:bg-red-600"
-                                            : "bg-[#1e628c] hover:bg-[#174e70]"
-                                    )}
-                                >
-                                    {selectedExercise.isCompleted ? 'Reset Progress' : 'Mark as Complete'}
-                                </button>
+                                {selectedExercise.isCompleted && (() => {
+                                    // Check if next exercise exists and is unlocked
+                                    const category = selectedExercise.category;
+                                    const index = exercises[category].findIndex(ex => ex.id === selectedExercise.id);
+                                    const nextExerciseExists = index + 1 < exercises[category].length;
+                                    const nextExerciseUnlocked = nextExerciseExists && !exercises[category][index + 1].isLocked;
+                                    
+                                    // Disable button if next exercise is locked
+                                    const canReset = nextExerciseUnlocked;
+                                    
+                                    return (
+                                        <button
+                                            onClick={() => canReset && resetExercise(selectedExercise.category, selectedExercise.id)}
+                                            className={cn(
+                                                "flex-1 rounded-lg py-2 text-center font-medium",
+                                                canReset 
+                                                    ? "bg-red-500 hover:bg-red-600 text-white" 
+                                                    : "bg-red-300 text-white cursor-not-allowed"
+                                            )}
+                                            disabled={!canReset}
+                                            title={!canReset ? "Cannot reset - next exercise is still locked" : ""}
+                                        >
+                                            Reset Progress
+                                        </button>
+                                    );
+                                })() || (
+                                    <button
+                                        onClick={() => completeExercise(selectedExercise.category, selectedExercise.id)}
+                                        className="flex-1 rounded-lg bg-[#1e628c] py-2 text-center font-medium text-white hover:bg-[#174e70]"
+                                    >
+                                        Mark as Complete
+                                    </button>
+                                )}
                                 <button
                                     onClick={() => setSelectedExercise(null)}
                                     className="flex-1 rounded-lg border border-slate-300 bg-white py-2 text-center font-medium text-slate-700 hover:bg-slate-50"
