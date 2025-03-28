@@ -3,12 +3,10 @@ import { useLocation } from "react-router-dom";
 const PathDisplay = () => {
     const location = useLocation();
     
-    // Format the path to be more readable
+    // Just display the current path
     const formatPath = (path) => {
-        if (path === "/") return "dashboard";
-        
-        // Remove the leading slash and replace with 'dashboard/'
-        return "dashboard" + path;
+        // Remove trailing slash if it exists
+        return path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path;
     };
     
     return (
