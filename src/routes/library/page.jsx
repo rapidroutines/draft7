@@ -126,11 +126,11 @@ const exercises = [
     },
      {
         id: 16,
-        title: "pseudo push up",
+        title: "Pseudo Push Up",
         category: "calisthenics",
-        description: "An effective cardio exercise that improves coordination, rhythm, and endurance.",
+        description: "An advanced variation of push-ups that prepares for planche by positioning hands closer to hips.",
         difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Jump+Rope"
+        image: "https://via.placeholder.com/300x180?text=Pseudo+Push+Up"
     }
 ];
 
@@ -140,6 +140,11 @@ const customBlue = "#1e628c";
 const LibraryPage = () => {
     const [activeCategory, setActiveCategory] = useState('all');
     const [filteredExercises, setFilteredExercises] = useState(exercises);
+    
+    // Update document title for better SEO and user experience
+    useEffect(() => {
+        document.title = "RapidRoutines - Exercise Library";
+    }, []);
     
     useEffect(() => {
         // Filter exercises based on active category
@@ -162,7 +167,7 @@ const LibraryPage = () => {
                     className={cn(
                         "px-4 py-2 rounded-full text-sm font-semibold transition-colors",
                         activeCategory === 'all' 
-                            ? `bg-[${customBlue}] text-white` 
+                            ? "bg-[#1e628c] text-white" 
                             : "bg-white text-slate-700 hover:bg-slate-100"
                     )}
                     style={{ backgroundColor: activeCategory === 'all' ? customBlue : '' }}
@@ -174,7 +179,7 @@ const LibraryPage = () => {
                     className={cn(
                         "px-4 py-2 rounded-full text-sm font-semibold transition-colors",
                         activeCategory === 'calisthenics' 
-                            ? `bg-[${customBlue}] text-white` 
+                            ? "bg-[#1e628c] text-white" 
                             : "bg-white text-slate-700 hover:bg-slate-100"
                     )}
                     style={{ backgroundColor: activeCategory === 'calisthenics' ? customBlue : '' }}
@@ -186,7 +191,7 @@ const LibraryPage = () => {
                     className={cn(
                         "px-4 py-2 rounded-full text-sm font-semibold transition-colors",
                         activeCategory === 'mobility' 
-                            ? `bg-[${customBlue}] text-white` 
+                            ? "bg-[#1e628c] text-white" 
                             : "bg-white text-slate-700 hover:bg-slate-100"
                     )}
                     style={{ backgroundColor: activeCategory === 'mobility' ? customBlue : '' }}
@@ -198,7 +203,7 @@ const LibraryPage = () => {
                     className={cn(
                         "px-4 py-2 rounded-full text-sm font-semibold transition-colors",
                         activeCategory === 'cardio' 
-                            ? `bg-[${customBlue}] text-white` 
+                            ? "bg-[#1e628c] text-white" 
                             : "bg-white text-slate-700 hover:bg-slate-100"
                     )}
                     style={{ backgroundColor: activeCategory === 'cardio' ? customBlue : '' }}
@@ -256,10 +261,36 @@ const LibraryPage = () => {
                                      exercise.difficulty === 2 ? 'Intermediate' : 'Advanced'}
                                 </span>
                             </div>
+
+                            {/* Added exercise details button */}
+                            <div className="mt-4">
+                                <button 
+                                    className="w-full rounded-md bg-slate-100 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors"
+                                    onClick={() => {
+                                        // This would typically open a modal or navigate to details page
+                                        alert(`Details for ${exercise.title} would open here.`);
+                                    }}
+                                >
+                                    View Details
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
+
+            {/* No results message when filters return empty */}
+            {filteredExercises.length === 0 && (
+                <div className="py-8 text-center">
+                    <p className="text-slate-600">No exercises found in this category.</p>
+                    <button
+                        onClick={() => setActiveCategory('all')}
+                        className="mt-4 text-[#1e628c] hover:underline"
+                    >
+                        View all exercises
+                    </button>
+                </div>
+            )}
 
             <Footer />
         </div>
