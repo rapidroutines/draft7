@@ -20,7 +20,7 @@ export const navbarLinks = [
             {
                 label: "Dashboard",
                 icon: Home,
-                path: "/dashboard", // Changed from "/" to "/dashboard"
+                path: "/dashboard", // This is correct
             },
         ],
     },
@@ -30,12 +30,12 @@ export const navbarLinks = [
             {
                 label: "Chatbot",
                 icon: ChartColumn,
-                path: "/dashboard/chatbot", // Updated with /dashboard prefix
+                path: "/dashboard/chatbot", // This is already correct
             },
             {
                 label: "RepBot",
                 icon: NotepadText,
-                path: "/dashboard/repbot", // Updated with /dashboard prefix
+                path: "/dashboard/repbot", // This is already correct
             },
         ],
     },
@@ -45,17 +45,17 @@ export const navbarLinks = [
             {
                 label: "Library",
                 icon: BookOpen,
-                path: "/dashboard/library", // Updated with /dashboard prefix
+                path: "/dashboard/library", // This is already correct
             },
             {
                 label: "Exercise Tracker",
                 icon: Dumbbell,
-                path: "/dashboard/exercise-tracker", // Updated with /dashboard prefix
+                path: "/dashboard/exercise-tracker", // This is already correct
             },
             {
                 label: "Rapidtree",
                 icon: TreePine,
-                path: "/dashboard/rapidtree", // Updated with /dashboard prefix
+                path: "/dashboard/rapidtree", // This is already correct
             },
         ],
     },
