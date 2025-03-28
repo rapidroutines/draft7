@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/theme-context";
 
 import Layout from "@/routes/layout";
@@ -10,58 +10,55 @@ import LibraryPage from "@/routes/library/page";
 import RapidTreePage from "@/routes/rapidtree/page";
 
 function App() {
-    // Changed from createHashRouter to createBrowserRouter
     const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Navigate to="/dashboard" replace />, // Redirect root to dashboard
+        },
         {
             path: "/",
             element: <Layout />,
             children: [
                 {
-                    path: "/", // Root route redirects to dashboard
+                    path: "dashboard",
                     element: <DashboardPage />,
                 },
-                // Dashboard routes - these will appear as /dashboard/xyz
                 {
-                    path: "dashboard",
-                    children: [
-                        {
-                            index: true, // /dashboard shows the dashboard page
-                            element: <DashboardPage />,
-                        },
-                        {
-                            path: "analytics",
-                            element: <h1 className="title">Analytics</h1>,
-                        },
-                        {
-                            path: "reports",
-                            element: <h1 className="title">Reports</h1>,
-                        },
-                        {
-                            path: "library",
-                            element: <LibraryPage />,
-                        },
-                        {
-                            path: "exercise-tracker",
-                            element: <ExerciseTrackerPage />,
-                        },
-                        {
-                            path: "rapidtree",
-                            element: <RapidTreePage />,
-                        },
-                        {
-                            path: "chatbot",
-                            element: <ChatbotPage />,
-                        },
-                        {
-                            path: "repbot",
-                            element: <RepBotPage />,
-                        },
-                        {
-                            path: "settings",
-                            element: <h1 className="title">Settings</h1>,
-                        },
-                    ],
+                    path: "dashboard/chatbot",
+                    element: <ChatbotPage />,
                 },
+                {
+                    path: "dashboard/repbot",
+                    element: <RepBotPage />,
+                },
+                {
+                    path: "dashboard/exercise-tracker",
+                    element: <ExerciseTrackerPage />,
+                },
+                {
+                    path: "dashboard/library",
+                    element: <LibraryPage />,
+                },
+                {
+                    path: "dashboard/rapidtree",
+                    element: <RapidTreePage />,
+                },
+                {
+                    path: "dashboard/analytics",
+                    element: <h1 className="title">Analytics</h1>,
+                },
+                {
+                    path: "dashboard/reports",
+                    element: <h1 className="title">Reports</h1>,
+                },
+                {
+                    path: "dashboard/settings",
+                    element: <h1 className="title">Settings</h1>,
+                },
+                {
+                    path: "*",
+                    element: <Navigate to="/dashboard" replace />, // Handle unknown routes
+                }
             ],
         },
     ]);
