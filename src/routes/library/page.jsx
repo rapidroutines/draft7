@@ -123,7 +123,7 @@ const exercises = [
         description: "An effective cardio exercise that improves coordination, rhythm, and endurance.",
         difficulty: 2,
         image: "https://via.placeholder.com/300x180?text=Jump+Rope"
-    }
+    },
      {
         id: 16,
         title: "pseudo push up",
