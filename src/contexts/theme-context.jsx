@@ -1,7 +1,6 @@
-import { createContext } from "react";
+import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-// Simplified context that always returns light theme
 const initialState = {
     theme: "light",
     setTheme: () => null,
@@ -9,11 +8,30 @@ const initialState = {
 
 export const ThemeProviderContext = createContext(initialState);
 
-export function ThemeProvider({ children, ...props }) {
-    // Fixed value for theme - always "light"
+export function ThemeProvider({ children, storageKey = "vite-ui-theme", ...props }) {
+    const [theme, setTheme] = useState(() => {
+        // Always default to light theme for initial state
+        return "light";
+    });
+
+    useEffect(() => {
+        const root = window.document.documentElement;
+        
+        // Remove the old theme class and add the new theme class
+        root.classList.remove("light", "dark");
+        root.classList.add(theme);
+        
+        // Save the theme to localStorage if using a storage key
+        if (storageKey) {
+            localStorage.setItem(storageKey, theme);
+        }
+    }, [theme, storageKey]);
+
     const value = {
-        theme: "light",
-        setTheme: () => {}, // Empty function since we don't need to change theme
+        theme,
+        setTheme: (newTheme) => {
+            setTheme(newTheme);
+        },
     };
 
     return (
@@ -28,4 +46,5 @@ export function ThemeProvider({ children, ...props }) {
 
 ThemeProvider.propTypes = {
     children: PropTypes.node,
+    storageKey: PropTypes.string,
 };

@@ -15,19 +15,6 @@ const Layout = ({ children }) => {
         setCollapsed(!isDesktopDevice);
     }, [isDesktopDevice]);
 
-    // Add listener for popstate to handle browser back/forward buttons
-    useEffect(() => {
-        const handlePopState = () => {
-            // Force the app to recognize the URL change
-            window.dispatchEvent(new CustomEvent('locationchange', {
-                detail: { pathname: window.location.pathname }
-            }));
-        };
-        
-        window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
-    }, []);
-
     useClickOutside([sidebarRef], () => {
         if (!isDesktopDevice && !collapsed) {
             setCollapsed(true);

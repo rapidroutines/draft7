@@ -10,7 +10,7 @@ export const Header = ({ collapsed, setCollapsed }) => {
                     className="btn-ghost size-10"
                     onClick={() => setCollapsed(!collapsed)}
                 >
-                    <ChevronsLeft className={collapsed && "rotate-180"} />
+                    <ChevronsLeft className={collapsed ? "rotate-180" : ""} />
                 </button>
                 {/* Search bar removed */}
             </div>
