@@ -1,94 +1,63 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Loader2, Check } from "lucide-react";
-import WorkoutSummaryModal from "@/components/workout-summary-modal";
-import WorkoutService from "@/services/workout-service";
+import RepBotIntegration from "./RepBotIntegration";
 
 const RepBotPage = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false);
-    const [currentWorkout, setCurrentWorkout] = useState(null);
-    const navigate = useNavigate();
-    
-    // Listen for messages from the iframe
+    // Add MediaPipe scripts dynamically
     useEffect(() => {
-        const handleMessage = (event) => {
-            // Verify origin (replace with your actual domain)
-            if (event.origin !== "https://render-repbot.vercel.app") {
-                return;
-            }
-            
-            // Handle workout complete message
-            if (event.data && event.data.type === 'WORKOUT_COMPLETE') {
-                console.log('Workout complete message received:', event.data.workout);
-                setCurrentWorkout(event.data.workout);
-                setShowModal(true);
+        // Helper function to load scripts in sequence
+        const loadScript = (src) => {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.crossOrigin = "anonymous";
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+                document.head.appendChild(script);
+            });
+        };
+
+        // Load scripts in the required order
+        const loadScripts = async () => {
+            try {
+                await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js');
+                await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js');
+                await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js');
+            } catch (error) {
+                console.error("Failed to load MediaPipe scripts:", error);
             }
         };
-        
-        window.addEventListener('message', handleMessage);
-        
+
+        loadScripts();
+
+        // Clean up scripts on unmount
         return () => {
-            window.removeEventListener('message', handleMessage);
+            // Optional: remove scripts if needed
         };
     }, []);
-    
-    // Handle modal actions
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
-    
-    const handleViewHistory = () => {
-        setShowModal(false);
-        navigate('/exercise-tracker');
-    };
 
     return (
-        <div className="flex flex-col h-[calc(100vh-120px)]">
-            {/* Full-height container for the iframe */}
-            <div className="relative flex-1 w-full overflow-hidden bg-white dark:bg-slate-950 rounded-lg shadow-sm">
-                {/* Loading overlay */}
-                {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-slate-950/80 z-10">
-                        <div className="flex flex-col items-center">
-                            <Loader2 className="h-10 w-10 animate-spin text-[#1e628c]" />
-                            <p className="mt-2 text-slate-600 dark:text-slate-300">Loading RepBot...</p>
-                        </div>
-                    </div>
-                )}
-                
-                {/* RepBot iframe - full height and width */}
-                <iframe 
-                    src="https://render-repbot.vercel.app/" 
-                    className="w-full h-full border-0"
-                    title="RepBot AI Exercise Counter"
-                    onLoad={() => setIsLoading(false)}
-                    allow="camera; microphone; accelerometer; gyroscope; fullscreen"
-                    allowFullScreen
-                />
+        <div className="flex flex-col gap-y-4">
+            
+            <div className="flex items-center justify-between">
+                <h1 className="title">RepBot Exercise Counter</h1>
             </div>
             
-            {/* Workout Complete notification */}
-            <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 z-20 hidden">
-                <div className="flex items-center">
-                    <div className="bg-green-100 rounded-full p-2 mr-3">
-                        <Check className="h-6 w-6 text-green-600" />
-                    </div>
-                    <div>
-                        <h3 className="font-medium">Workout Complete!</h3>
-                        <p className="text-sm text-slate-600">Great job on your workout.</p>
-                    </div>
-                </div>
-            </div>
+            <p className="text-slate-600">
+                RepBot uses your camera to count repetitions of various exercises. Position yourself so that your full body is visible.
+            </p>
             
-            {/* Workout Summary Modal */}
-            {showModal && currentWorkout && (
-                <WorkoutSummaryModal 
-                    workout={currentWorkout}
-                    onClose={handleCloseModal}
-                    onViewHistory={handleViewHistory}
-                />
-            )}
+            <RepBotIntegration />
+            
+            <div className="bg-white p-4 rounded-lg shadow-sm mt-4">
+                <h3 className="font-medium text-slate-900 mb-2">Tips for best results:</h3>
+                <ul className="list-disc pl-5 text-slate-600 space-y-1">
+                    <li>Make sure you have good lighting</li>
+                    <li>Position your camera so your full body is visible</li>
+                    <li>Wear clothing that contrasts with your background</li>
+                    <li>Keep at least 6 feet (2 meters) away from the camera</li>
+                    <li>For best results, use a webcam rather than a mobile device</li>
+                </ul>
+            </div>
         </div>
     );
 };
