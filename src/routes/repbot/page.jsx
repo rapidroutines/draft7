@@ -1,62 +1,53 @@
-import { useState, useEffect } from "react";
-import RepBotIntegration from "./RepBotIntegration";
+import { useState } from "react";
+import ExerciseCounter from "@/components/ExerciseCounter";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import { RefreshCw } from "lucide-react";
 
 const RepBotPage = () => {
-    // Add MediaPipe scripts dynamically
-    useEffect(() => {
-        // Helper function to load scripts in sequence
-        const loadScript = (src) => {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.crossOrigin = "anonymous";
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-                document.head.appendChild(script);
-            });
-        };
-
-        // Load scripts in the required order
-        const loadScripts = async () => {
-            try {
-                await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js');
-                await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js');
-                await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js');
-            } catch (error) {
-                console.error("Failed to load MediaPipe scripts:", error);
-            }
-        };
-
-        loadScripts();
-
-        // Clean up scripts on unmount
-        return () => {
-            // Optional: remove scripts if needed
-        };
-    }, []);
+    const [key, setKey] = useState(0); // Used to force remount of the component
+    
+    const handleRetry = () => {
+        // Force a remount of the ExerciseCounter component
+        setKey(prevKey => prevKey + 1);
+    };
+    
+    // Custom fallback component for the error boundary
+    const errorFallback = (
+        <div className="mt-4">
+            <p className="mb-4">This could be due to camera permission issues or incompatible browser.</p>
+            <button
+                onClick={handleRetry}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+            >
+                <RefreshCw size={18} />
+                Try Again
+            </button>
+        </div>
+    );
 
     return (
-        <div className="flex flex-col gap-y-4">
-            
-            <div className="flex items-center justify-between">
-                <h1 className="title">RepBot Exercise Counter</h1>
+        <div className="flex flex-col gap-y-4 h-[calc(100vh-80px)]">
+            <div className="flex items-center mb-2">
+                <div className="flex flex-col">
+                    <h1 className="title">RepBot AI Exercise Counter</h1>
+                    <p className="text-slate-600 text-sm">Count your exercise repetitions with AI assistance</p>
+                </div>
             </div>
             
-            <p className="text-slate-600">
-                RepBot uses your camera to count repetitions of various exercises. Position yourself so that your full body is visible.
-            </p>
+            <div className="flex-1 overflow-hidden">
+                <ErrorBoundary fallback={errorFallback}>
+                    <ExerciseCounter key={key} />
+                </ErrorBoundary>
+            </div>
             
-            <RepBotIntegration />
-            
-            <div className="bg-white p-4 rounded-lg shadow-sm mt-4">
-                <h3 className="font-medium text-slate-900 mb-2">Tips for best results:</h3>
-                <ul className="list-disc pl-5 text-slate-600 space-y-1">
-                    <li>Make sure you have good lighting</li>
-                    <li>Position your camera so your full body is visible</li>
-                    <li>Wear clothing that contrasts with your background</li>
-                    <li>Keep at least 6 feet (2 meters) away from the camera</li>
-                    <li>For best results, use a webcam rather than a mobile device</li>
-                </ul>
+            <div className="text-center text-sm text-slate-500 mt-2">
+                <p>Having trouble? Try refreshing the page and ensure you've granted camera permissions.</p>
+                <button 
+                    onClick={handleRetry}
+                    className="text-[#1e628c] font-medium hover:underline mt-1"
+                >
+                    Reset RepBot
+                </button>
             </div>
         </div>
     );
