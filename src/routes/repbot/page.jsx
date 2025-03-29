@@ -13,6 +13,11 @@ const SUPPORTED_EXERCISES = [
 ];
 
 const RepBotPage = () => {
+  // Handle click on the launch button
+  const handleLaunchClick = () => {
+    window.location.href = "https://rapidroutines.org/repbot";
+  };
+
   return (
     <div className="flex flex-col items-center gap-y-6">
       {/* Welcoming Header */}
@@ -45,15 +50,13 @@ const RepBotPage = () => {
         
         {/* Launch Button */}
         <div className="flex justify-center mt-6">
-          <a 
-            href="https://rapidroutines.org/repbot/"
-            target="_self"
-            rel="noopener noreferrer"
+          <button 
+            onClick={handleLaunchClick}
             className="inline-flex items-center justify-center rounded-lg bg-[#1e628c] text-white px-8 py-3 font-medium text-lg hover:bg-[#1a567c] transition-colors"
           >
             <Camera size={20} className="mr-2" />
             Launch RepBot
-          </a>
+          </button>
         </div>
       </div>
 
