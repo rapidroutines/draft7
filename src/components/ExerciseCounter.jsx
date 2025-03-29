@@ -8,11 +8,13 @@ const ExerciseCounter = () => {
   
   // State variables
   const [repCounter, setRepCounter] = useState(0);
+  const [lastLoggedRep, setLastLoggedRep] = useState(0); // Track last logged rep
   const [stage, setStage] = useState("down");
   const [feedback, setFeedback] = useState("");
   const [exerciseType, setExerciseType] = useState("bicepCurl");
   const [cameraStarted, setCameraStarted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showRepLogged, setShowRepLogged] = useState(false);
   
   // MediaPipe and camera instances
   const poseRef = useRef(null);
@@ -165,6 +167,11 @@ const ExerciseCounter = () => {
     };
   }, []);
 
+  // Reset lastLoggedRep when exercise type changes
+  useEffect(() => {
+    setLastLoggedRep(0);
+  }, [exerciseType]);
+
   // Canvas resize handler
   useEffect(() => {
     const handleResize = () => {
@@ -188,6 +195,7 @@ const ExerciseCounter = () => {
     console.log("Exercise changed to:", newExerciseType);
     setExerciseType(newExerciseType);
     setRepCounter(0);
+    setLastLoggedRep(0); // Reset last logged rep when exercise changes
     setStage("down");
     setFeedback("");
     resetInactivityTimer();
@@ -420,12 +428,6 @@ const ExerciseCounter = () => {
       // Process the response
       const result = await response.json();
       
-      // If exercise is being performed (rep count increases), reset inactivity
-      if (result.repCounter !== undefined && repCounter !== result.repCounter) {
-        resetInactivityTimer();
-        setRepCounter(result.repCounter);
-      }
-      
       updateUIFromResponse(result);
     } catch (error) {
       console.error('Error sending landmarks to backend:', error);
@@ -439,12 +441,14 @@ const ExerciseCounter = () => {
     if (result.repCounter !== undefined && repCounter !== result.repCounter) {
       // Exercise rep count increased
       const newRepCount = result.repCounter;
-      setRepCounter(newRepCount);
       
-      // Log rep to Exercise Tracker if rep was just completed
-      if (newRepCount > repCounter) {
+      // Log rep to Exercise Tracker if rep count has increased AND we haven't logged this rep yet
+      if (newRepCount > repCounter && newRepCount > lastLoggedRep) {
         logExerciseToTracker(exerciseType, newRepCount);
+        setLastLoggedRep(newRepCount); // Update last logged rep
       }
+      
+      setRepCounter(newRepCount);
     }
 
     // Update stage if changed
@@ -463,9 +467,6 @@ const ExerciseCounter = () => {
     }
   };
   
-  // State for showing rep logged notification
-  const [showRepLogged, setShowRepLogged] = useState(false);
-  
   // Function to log exercise reps to the Exercise Tracker
   const logExerciseToTracker = (exerciseType, repCount) => {
     try {
@@ -481,11 +482,11 @@ const ExerciseCounter = () => {
           .replace(/^./, str => str.toUpperCase()); // Capitalize first letter
       };
       
-      // Create new tracker entry
+      // Create new tracker entry - ONE REP at a time
       const newEntry = {
         id: Date.now(), // Unique ID based on timestamp
         exercise: formatExerciseName(exerciseType),
-        reps: 1, // Count as 1 rep each time
+        reps: 1, // Always count as 1 rep (single rep tracking)
         date: new Date().toISOString(),
         sets: Math.ceil(repCount / 5) // Assume a new set every 5 reps
       };
@@ -496,9 +497,9 @@ const ExerciseCounter = () => {
       // Save back to localStorage
       localStorage.setItem(trackerKey, JSON.stringify(trackerData));
       
-      console.log(`Logged ${newEntry.exercise} rep to Exercise Tracker`);
+      console.log(`Logged ${newEntry.exercise} rep to Exercise Tracker (Rep #${repCount})`);
       
-      // Show notification that rep was logged
+      // Show notification that rep was logged - only once per rep
       setShowRepLogged(true);
       setTimeout(() => {
         setShowRepLogged(false);

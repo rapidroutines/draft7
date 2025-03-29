@@ -4,6 +4,44 @@ import { Link } from "react-router-dom";
 import { cn } from "@/utils/cn";
 
 const ExerciseTrackerPage = () => {
+    // Function to handle manual refresh of data
+    const refreshData = () => {
+        // Simply re-run the data loading process
+        setIsLoading(true);
+        
+        try {
+            // Get workout history from localStorage
+            const workoutHistory = JSON.parse(localStorage.getItem('workout_history') || '[]');
+            
+            // Get exercise tracking data from ExerciseCounter component
+            const exerciseData = JSON.parse(localStorage.getItem('exerciseTrackerData') || '[]');
+            
+            // Convert exercise data to workout format
+            const exerciseWorkouts = processExerciseData(exerciseData);
+            
+            // Combine both data sources
+            const combinedWorkouts = [...workoutHistory, ...exerciseWorkouts];
+            
+            // Sort workouts by date (newest first)
+            const sortedWorkouts = combinedWorkouts.sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            setWorkouts(sortedWorkouts);
+            
+            // Calculate stats
+            calculateStats(sortedWorkouts);
+            
+            // If there are workouts, select the first one by default
+            if (sortedWorkouts.length > 0) {
+                setSelectedWorkout(sortedWorkouts[0]);
+            }
+        } catch (error) {
+            console.error('Error refreshing workout data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     const [workouts, setWorkouts] = useState([]);
     const [selectedWorkout, setSelectedWorkout] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -22,55 +60,24 @@ const ExerciseTrackerPage = () => {
             // Get workout history from localStorage
             const workoutHistory = JSON.parse(localStorage.getItem('workout_history') || '[]');
             
+            // Get exercise tracking data from ExerciseCounter component
+            const exerciseData = JSON.parse(localStorage.getItem('exerciseTrackerData') || '[]');
+            
+            // Convert exercise data to workout format
+            const exerciseWorkouts = processExerciseData(exerciseData);
+            
+            // Combine both data sources
+            const combinedWorkouts = [...workoutHistory, ...exerciseWorkouts];
+            
             // Sort workouts by date (newest first)
-            const sortedWorkouts = workoutHistory.sort((a, b) => {
+            const sortedWorkouts = combinedWorkouts.sort((a, b) => {
                 return new Date(b.date) - new Date(a.date);
             });
             
             setWorkouts(sortedWorkouts);
             
             // Calculate stats
-            if (sortedWorkouts.length > 0) {
-                // Calculate total workouts
-                const totalWorkouts = sortedWorkouts.length;
-                
-                // Calculate total exercises
-                const exercises = sortedWorkouts.flatMap(workout => workout.exercises || []);
-                const totalExercises = exercises.reduce((sum, ex) => sum + ex.reps, 0);
-                
-                // Find most popular exercise
-                const exerciseCounts = {};
-                exercises.forEach(ex => {
-                    exerciseCounts[ex.name] = (exerciseCounts[ex.name] || 0) + 1;
-                });
-                
-                let mostPopular = "";
-                let highestCount = 0;
-                
-                Object.entries(exerciseCounts).forEach(([name, count]) => {
-                    if (count > highestCount) {
-                        mostPopular = name;
-                        highestCount = count;
-                    }
-                });
-                
-                // Calculate workouts this week
-                const today = new Date();
-                const oneWeekAgo = new Date(today);
-                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                
-                const thisWeekWorkouts = sortedWorkouts.filter(workout => {
-                    const workoutDate = new Date(workout.date);
-                    return workoutDate >= oneWeekAgo;
-                });
-                
-                setStats({
-                    totalWorkouts,
-                    totalExercises,
-                    mostPopularExercise: mostPopular,
-                    thisWeekCount: thisWeekWorkouts.length
-                });
-            }
+            calculateStats(sortedWorkouts);
             
             // If there are workouts, select the first one by default
             if (sortedWorkouts.length > 0) {
@@ -82,6 +89,93 @@ const ExerciseTrackerPage = () => {
             setIsLoading(false);
         }
     }, []);
+    
+    // Helper function to process exercise data into workout format
+    const processExerciseData = (exerciseData) => {
+        if (!exerciseData || exerciseData.length === 0) return [];
+        
+        // Group exercises by date (year-month-day)
+        const exercisesByDate = {};
+        
+        exerciseData.forEach(exercise => {
+            const date = new Date(exercise.date);
+            const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+            
+            if (!exercisesByDate[dateKey]) {
+                exercisesByDate[dateKey] = [];
+            }
+            
+            exercisesByDate[dateKey].push(exercise);
+        });
+        
+        // Convert to workout format
+        return Object.entries(exercisesByDate).map(([dateKey, exercises]) => {
+            return {
+                id: `repbot-${dateKey}`,
+                date: new Date(dateKey).toISOString(),
+                title: "RepBot Session",
+                duration: exercises.length * 60, // Estimate 60 seconds per exercise
+                exercises: exercises,
+                source: "RepBot"
+            };
+        });
+    };
+    
+    // Helper function to calculate stats
+    const calculateStats = (workouts) => {
+        if (workouts.length === 0) {
+            setStats({
+                totalWorkouts: 0,
+                totalExercises: 0,
+                mostPopularExercise: "",
+                thisWeekCount: 0
+            });
+            return;
+        }
+        
+        // Calculate total workouts
+        const totalWorkouts = workouts.length;
+        
+        // Calculate total exercises
+        const exercises = workouts.flatMap(workout => workout.exercises || []);
+        const totalExercises = exercises.reduce((sum, ex) => sum + (ex.reps || 1), 0);
+        
+        // Find most popular exercise
+        const exerciseCounts = {};
+        exercises.forEach(ex => {
+            const exerciseName = ex.exercise || ex.name;
+            if (exerciseName) {
+                exerciseCounts[exerciseName] = (exerciseCounts[exerciseName] || 0) + 1;
+            }
+        });
+        
+        let mostPopular = "";
+        let highestCount = 0;
+        
+        Object.entries(exerciseCounts).forEach(([name, count]) => {
+            if (count > highestCount) {
+                mostPopular = name;
+                highestCount = count;
+            }
+        });
+        
+        // Calculate workouts this week
+        const today = new Date();
+        const oneWeekAgo = new Date(today);
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        
+        const thisWeekWorkouts = workouts.filter(workout => {
+            const workoutDate = new Date(workout.date);
+            return workoutDate >= oneWeekAgo;
+        });
+        
+        setStats({
+            totalWorkouts,
+            totalExercises,
+            mostPopularExercise: mostPopular,
+            thisWeekCount: thisWeekWorkouts.length
+        });
+    };
     
     // Format date for display
     const formatDate = (dateString) => {
@@ -102,19 +196,33 @@ const ExerciseTrackerPage = () => {
         
         if (window.confirm('Are you sure you want to delete this workout?')) {
             try {
-                // Get current workouts
-                const currentWorkouts = JSON.parse(localStorage.getItem('workout_history') || '[]');
+                // Check if this is a RepBot workout
+                const isRepBotWorkout = id.startsWith('repbot-');
                 
-                // Filter out the workout to delete
-                const updatedWorkouts = currentWorkouts.filter(workout => workout.id !== id);
+                if (isRepBotWorkout) {
+                    // For RepBot workouts, we need to find and remove the individual exercises
+                    const exerciseData = JSON.parse(localStorage.getItem('exerciseTrackerData') || '[]');
+                    const dateKey = id.replace('repbot-', '');
+                    
+                    // Filter out exercises from this date
+                    const updatedExercises = exerciseData.filter(ex => {
+                        const exDate = new Date(ex.date);
+                        const exDateKey = exDate.toISOString().split('T')[0];
+                        return exDateKey !== dateKey;
+                    });
+                    
+                    // Save updated exercise data
+                    localStorage.setItem('exerciseTrackerData', JSON.stringify(updatedExercises));
+                } else {
+                    // For regular workouts, use the original deletion logic
+                    const currentWorkouts = JSON.parse(localStorage.getItem('workout_history') || '[]');
+                    const updatedWorkouts = currentWorkouts.filter(workout => workout.id !== id);
+                    localStorage.setItem('workout_history', JSON.stringify(updatedWorkouts));
+                    localStorage.removeItem(`workout_details_${id}`);
+                }
                 
-                // Save updated list
-                localStorage.setItem('workout_history', JSON.stringify(updatedWorkouts));
-                
-                // Remove workout details
-                localStorage.removeItem(`workout_details_${id}`);
-                
-                // Update state
+                // Update state by removing the deleted workout
+                const updatedWorkouts = workouts.filter(workout => workout.id !== id);
                 setWorkouts(updatedWorkouts);
                 
                 // If the deleted workout was selected, select another one
@@ -123,51 +231,18 @@ const ExerciseTrackerPage = () => {
                 }
                 
                 // Update stats
-                const totalWorkouts = updatedWorkouts.length;
-                const exercises = updatedWorkouts.flatMap(workout => workout.exercises || []);
-                const totalExercises = exercises.reduce((sum, ex) => sum + ex.reps, 0);
+                calculateStats(updatedWorkouts);
                 
-                const exerciseCounts = {};
-                exercises.forEach(ex => {
-                    exerciseCounts[ex.name] = (exerciseCounts[ex.name] || 0) + 1;
-                });
-                
-                let mostPopular = "";
-                let highestCount = 0;
-                
-                Object.entries(exerciseCounts).forEach(([name, count]) => {
-                    if (count > highestCount) {
-                        mostPopular = name;
-                        highestCount = count;
-                    }
-                });
-                
-                // Calculate workouts this week
-                const today = new Date();
-                const oneWeekAgo = new Date(today);
-                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                
-                const thisWeekWorkouts = updatedWorkouts.filter(workout => {
-                    const workoutDate = new Date(workout.date);
-                    return workoutDate >= oneWeekAgo;
-                });
-                
-                setStats({
-                    totalWorkouts,
-                    totalExercises,
-                    mostPopularExercise: mostPopular,
-                    thisWeekCount: thisWeekWorkouts.length
-                });
             } catch (error) {
                 console.error('Error deleting workout:', error);
             }
         }
     };
-    
+
     return (
         <div className="flex flex-col gap-y-6">
             {/* Header */}
-            <div className="flex items-center mb-2">
+            <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1e628c] text-white">
                         <Dumbbell size={20} />
@@ -177,6 +252,19 @@ const ExerciseTrackerPage = () => {
                         <p className="text-slate-600 text-sm">Track your workouts and monitor your progress</p>
                     </div>
                 </div>
+                <button 
+                    onClick={refreshData}
+                    className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex items-center gap-2"
+                    title="Refresh data from RepBot"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                        <path d="M21 3v5h-5" />
+                        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                        <path d="M8 16H3v5" />
+                    </svg>
+                    <span>Refresh</span>
+                </button>
             </div>
             
             {/* Stats Cards */}
@@ -261,6 +349,9 @@ const ExerciseTrackerPage = () => {
                                         <div className="flex items-center gap-2">
                                             <Calendar size={14} className="text-slate-500" />
                                             <p className="font-medium">{formatDate(workout.date)}</p>
+                                            {workout.source === "RepBot" && (
+                                                <span className="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded">RepBot</span>
+                                            )}
                                         </div>
                                         <div className="flex items-center gap-2 mt-1 text-slate-600 text-sm">
                                             <Clock size={14} />
@@ -303,7 +394,7 @@ const ExerciseTrackerPage = () => {
                             <div className="mb-6">
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="text-lg font-medium">
-                                        Workout on {formatDate(selectedWorkout.date)}
+                                        {selectedWorkout.source === "RepBot" ? "RepBot Session" : "Workout"} on {formatDate(selectedWorkout.date)}
                                     </h3>
                                     <div className="flex items-center gap-2 text-slate-600 text-sm">
                                         <Clock size={16} />
@@ -324,11 +415,11 @@ const ExerciseTrackerPage = () => {
                                         <div key={index} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
                                             <div className="flex justify-between items-center">
                                                 <div>
-                                                    <h4 className="font-medium">{exercise.name}</h4>
-                                                    <p className="text-slate-600 text-sm">{exercise.reps} reps completed</p>
+                                                    <h4 className="font-medium">{exercise.exercise || exercise.name}</h4>
+                                                    <p className="text-slate-600 text-sm">{exercise.reps || 1} reps completed</p>
                                                 </div>
                                                 <div className="h-10 w-10 flex items-center justify-center bg-[#1e628c] text-white rounded-full font-bold">
-                                                    {exercise.reps}
+                                                    {exercise.reps || 1}
                                                 </div>
                                             </div>
                                         </div>
