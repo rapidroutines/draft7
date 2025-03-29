@@ -5,6 +5,8 @@ import {
   Home,
   NotepadText,
   TreePine,
+  Brain,
+  ClipboardList
 } from "lucide-react";
 
 export const navbarLinks = [
@@ -31,6 +33,11 @@ export const navbarLinks = [
         icon: NotepadText,
         path: "/repbot",
       },
+      {
+        label: "AI Workout",
+        icon: Brain,
+        path: "/ai-workout",
+      },
     ],
   },
   {
@@ -50,6 +57,11 @@ export const navbarLinks = [
         label: "Rapidtree",
         icon: TreePine,
         path: "/rapidtree",
+      },
+      {
+        label: "Saved Workouts",
+        icon: ClipboardList,
+        path: "/saved-workouts",
       },
     ],
   },

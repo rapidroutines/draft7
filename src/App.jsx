@@ -8,6 +8,8 @@ import RepBotPage from "@/routes/repbot/page";
 import ExerciseTrackerPage from "@/routes/exercise-tracker/page";
 import LibraryPage from "@/routes/library/page";
 import RapidTreePage from "@/routes/rapidtree/page";
+import AiWorkoutPage from "@/routes/ai-workout/page";
+import SavedWorkoutsPage from "@/routes/saved-workouts/page"; // Import the new page
 
 function App() {
     return (
@@ -23,6 +25,8 @@ function App() {
                         <Route path="/rapidtree" element={<RapidTreePage />} />
                         <Route path="/chatbot" element={<ChatbotPage />} />
                         <Route path="/repbot" element={<RepBotPage />} />
+                        <Route path="/ai-workout" element={<AiWorkoutPage />} />
+                        <Route path="/saved-workouts" element={<SavedWorkoutsPage />} />
                         <Route path="*" element={<DashboardPage />} />
                     </Routes>
                 </Layout>
