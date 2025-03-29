@@ -49,10 +49,6 @@ const RepBotPage = () => {
             href="https://rapidroutines.org/repbot/"
             target="_self"
             rel="noopener noreferrer"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = "https://rapidroutines.org/repbot/";
-            }}
             className="inline-flex items-center justify-center rounded-lg bg-[#1e628c] text-white px-8 py-3 font-medium text-lg hover:bg-[#1a567c] transition-colors"
           >
             <Camera size={20} className="mr-2" />
