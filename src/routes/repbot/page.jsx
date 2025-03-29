@@ -14,7 +14,7 @@ const SUPPORTED_EXERCISES = [
 
 const RepBotPage = () => {
   const handleLaunchClick = () => {
-    window.open("https://rapidroutines.org/repbot/", "_blank", "noopener,noreferrer");
+    window.location.href = "https://rapidroutines.org/repbot/";
   };
 
   return (
