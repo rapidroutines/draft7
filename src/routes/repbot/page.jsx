@@ -1,71 +1,63 @@
-import { Outlet, useLocation } from "react-router-dom";
-import { useMediaQuery } from "@uidotdev/usehooks";
-import { useClickOutside } from "@/hooks/use-click-outside";
-import { Sidebar } from "@/layouts/sidebar";
-import { Header } from "@/layouts/header";
-import { cn } from "@/utils/cn";
-import { useEffect, useRef, useState } from "react";
+import { Camera } from "lucide-react";
+import { Footer } from "@/layouts/footer";
 
-// Path Display Component
-const PathDisplay = () => {
-    const location = useLocation();
-    
-    // Format the path to be more readable
-    const formatPath = (path) => {
-        if (path === "/") return "dashboard";
+// Exercise types supported by RepBot
+const SUPPORTED_EXERCISES = [
+  "Bicep Curl", 
+  "Squat", 
+  "Push-up", 
+  "Shoulder Press", 
+  "Sit-up", 
+  "Jumping Jacks", 
+  "Lunges"
+];
+
+const RepBotPage = () => {
+  return (
+    <div className="flex flex-col items-center gap-y-6">
+      {/* Welcoming Header */}
+      <div className="w-full text-center">
+        <h1 className="title mb-2">Welcome to RepBot</h1>
+        <p className="text-lg text-slate-600 dark:text-slate-300">
+          Your AI workout form assistant
+        </p>
+      </div>
+
+      {/* Simple Container */}
+      <div className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md border border-slate-200 dark:border-slate-700">
+        {/* Exercises Section */}
+        <h2 className="text-xl font-medium text-slate-900 dark:text-white mb-4">
+          Exercises We Support
+        </h2>
         
-        // Remove the leading slash and replace with 'dashboard/'
-        return "dashboard" + path;
-    };
-    
-    return (
-        <div className="fixed bottom-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-slate-700 shadow-sm border border-slate-200 z-50">
-            {formatPath(location.pathname)}
-        </div>
-    );
-};
-
-const Layout = () => {
-    const isDesktopDevice = useMediaQuery("(min-width: 768px)");
-    const [collapsed, setCollapsed] = useState(!isDesktopDevice);
-    const sidebarRef = useRef(null);
-
-    useEffect(() => {
-        setCollapsed(!isDesktopDevice);
-    }, [isDesktopDevice]);
-
-    useClickOutside([sidebarRef], () => {
-        if (!isDesktopDevice && !collapsed) {
-            setCollapsed(true);
-        }
-    });
-
-    return (
-        <div className="min-h-screen bg-slate-100">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+          {SUPPORTED_EXERCISES.map((exercise, index) => (
             <div
-                className={cn(
-                    "pointer-events-none fixed inset-0 -z-10 bg-black opacity-0 transition-opacity",
-                    !collapsed && "max-md:pointer-events-auto max-md:z-50 max-md:opacity-30",
-                )}
-            />
-            <Sidebar
-                ref={sidebarRef}
-                collapsed={collapsed}
-            />
-            <div className={cn("transition-[margin] duration-300", collapsed ? "md:ml-[70px]" : "md:ml-[240px]")}>
-                <Header
-                    collapsed={collapsed}
-                    setCollapsed={setCollapsed}
-                />
-                <div className="h-[calc(100vh-60px)] overflow-y-auto overflow-x-hidden p-6">
-                    <Outlet />
-                </div>
+              key={index}
+              className={`bg-slate-50 dark:bg-slate-700 rounded-lg p-3 text-center border-2 border-[#1e628c]/30 ${
+                exercise === "Lunge" ? "col-span-2 sm:col-span-3 mx-auto max-w-xs" : ""
+              }`}
+            >
+              <span className="text-slate-800 dark:text-slate-200">{exercise}</span>
             </div>
-            
-            {/* Display current path */}
-            <PathDisplay />
+          ))}
         </div>
-    );
+        
+        {/* Launch Button */}
+        <div className="flex justify-center mt-6">
+          <a 
+            href="https://rapidroutines.org/repbot/"
+            className="inline-flex items-center justify-center rounded-lg bg-[#1e628c] text-white px-8 py-3 font-medium text-lg hover:bg-[#1a567c] transition-colors"
+          >
+            <Camera size={20} className="mr-2" />
+            Launch RepBot
+          </a>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
 };
 
-export default Layout;
+export default RepBotPage;
