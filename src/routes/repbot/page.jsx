@@ -43,11 +43,12 @@ const RepBotPage = () => {
           ))}
         </div>
         
-        {/* Launch Button */}
+        {/* Launch Button - Modified to open in same tab */}
         <div className="flex justify-center mt-6">
           <a 
             href="https://rapidroutines.org/repbot/"
             className="inline-flex items-center justify-center rounded-lg bg-[#1e628c] text-white px-8 py-3 font-medium text-lg hover:bg-[#1a567c] transition-colors"
+            /* Removed target="_blank" attribute to open in the same tab */
           >
             <Camera size={20} className="mr-2" />
             Launch RepBot
