@@ -1,11 +1,13 @@
-import { forwardRef } from "react";
-import { NavLink } from "react-router-dom";
+import { forwardRef, useContext } from "react";
 import { navbarLinks } from "@/constants";
 import logoLight from "@/assets/light_mode_1.png";
 import { cn } from "@/utils/cn";
 import PropTypes from "prop-types";
+import { RouteContext } from "@/App";
 
 export const Sidebar = forwardRef(({ collapsed }, ref) => {
+    const { currentRoute, navigate } = useContext(RouteContext);
+    
     return (
         <aside
             ref={ref}
@@ -15,7 +17,7 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                 collapsed ? "max-md:-left-full" : "max-md:left-0",
             )}
         >
-            <div className="flex gap-x-3 p-3">
+            <div className="flex gap-x-3 p-3 cursor-pointer" onClick={() => navigate("/")}>
                 <img
                     src={logoLight}
                     alt="Logoipsum"
@@ -30,17 +32,25 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
                     >
                         <p className={cn("sidebar-group-title", collapsed && "md:w-[45px]")}>{navbarLink.title}</p>
                         {navbarLink.links.map((link) => (
-                            <NavLink
+                            <a
                                 key={link.label}
-                                to={link.path}
-                                className={cn("sidebar-item", collapsed && "md:w-[45px]")}
+                                href={link.path}
+                                className={cn(
+                                    "sidebar-item", 
+                                    collapsed && "md:w-[45px]",
+                                    currentRoute === link.path && "active"
+                                )}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate(link.path);
+                                }}
                             >
                                 <link.icon
                                     size={22}
                                     className="flex-shrink-0"
                                 />
                                 {!collapsed && <p className="whitespace-nowrap">{link.label}</p>}
-                            </NavLink>
+                            </a>
                         ))}
                     </nav>
                 ))}
