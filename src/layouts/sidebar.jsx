@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { navbarLinks } from "@/constants";
-import logoLight from "@/assets/light_mode_1.png";
+import logoLight from "@/assets/main_logo.png";
 import { cn } from "@/utils/cn";
 import PropTypes from "prop-types";
 
