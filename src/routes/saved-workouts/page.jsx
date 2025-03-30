@@ -261,28 +261,7 @@ const SavedWorkoutsPage = () => {
                                     ))}
                                 </div>
                                 
-                                {/* Workout Tips */}
-                                <div className="mt-6 rounded-md bg-blue-50 p-4">
-                                    <h4 className="font-medium text-blue-700 mb-2">Workout Tips</h4>
-                                    <ul className="space-y-2 text-sm text-blue-600">
-                                        <li className="flex items-start gap-2">
-                                            <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                                            <span>Begin with a 5-minute warm-up to prepare your muscles and joints.</span>
-                                        </li>
-                                        <li className="flex items-start gap-2">
-                                            <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                                            <span>Stay hydrated throughout your workout.</span>
-                                        </li>
-                                        <li className="flex items-start gap-2">
-                                            <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                                            <span>Focus on proper form rather than maximizing weight or speed.</span>
-                                        </li>
-                                        <li className="flex items-start gap-2">
-                                            <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                                            <span>End with a 5-minute cooldown and stretching session.</span>
-                                        </li>
-                                    </ul>
-                                </div>
+                        
                             </div>
                         </div>
                     ) : (

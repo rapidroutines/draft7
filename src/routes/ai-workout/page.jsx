@@ -304,6 +304,23 @@ const AiWorkoutGenerator = () => {
     setFormData(workout.parameters);
   };
 
+  // Save workout to Saved Workouts
+  const saveWorkout = () => {
+    if (!workout) return;
+    
+    // Get existing saved workouts or initialize empty array
+    const savedWorkouts = JSON.parse(localStorage.getItem('savedWorkouts') || '[]');
+    
+    // Add current workout to saved workouts
+    savedWorkouts.push(workout);
+    
+    // Save back to localStorage
+    localStorage.setItem('savedWorkouts', JSON.stringify(savedWorkouts));
+    
+    // Show confirmation to user
+    alert("Workout saved! You can view it in your Saved Workouts section.");
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-3">
@@ -521,28 +538,7 @@ const AiWorkoutGenerator = () => {
                   </table>
                 </div>
                 
-                {/* Workout Tips */}
-                <div className="mt-5 rounded-md bg-blue-50 p-4">
-                  <h4 className="mb-2 font-medium text-blue-700">Workout Tips</h4>
-                  <ul className="space-y-1 text-sm text-blue-600">
-                    <li className="flex items-start gap-2">
-                      <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                      <span>Begin with a 5-minute warm-up to prepare your muscles and joints.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                      <span>Stay hydrated throughout your workout.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                      <span>Focus on proper form rather than maximizing weight or speed.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
-                      <span>End with a 5-minute cooldown and stretching session.</span>
-                    </li>
-                  </ul>
-                </div>
+    
                 
                 {/* Personalized Notes */}
                 {formData.injuries && (
@@ -566,10 +562,7 @@ const AiWorkoutGenerator = () => {
                   </button>
                   
                   <button 
-                    onClick={() => {
-                      // In a real app, this would save to a backend database
-                      alert("Workout saved to your collection!");
-                    }}
+                    onClick={saveWorkout}
                     className="flex items-center rounded-md bg-[#1e628c] px-4 py-2 text-sm font-medium text-white hover:bg-[#174e70]"
                   >
                     <Dumbbell className="mr-2 h-4 w-4" />

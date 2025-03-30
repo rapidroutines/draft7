@@ -1,136 +1,152 @@
 import { useState, useEffect } from "react";
 import { Footer } from "@/layouts/footer";
 import { cn } from "@/utils/cn";
+import pushUpsImage from "@/assets/pseudo-planche-push-ups.png";
+import declinepushUpsImage from "@/assets/decline-push-ups.png";
+import pistolSquatsImage from "@/assets/pistol-squats.png";
+import hollowbodyHoldImage from "@/assets/hollow-body-hold.png";
+import straddlePlancheImage from "@/assets/straddle-planche.png";
+import dragonFlagImage from "@/assets/dragon-flag.png";
+import cossackSquatHoldImage from "@/assets/cossack-squat-hold.png";
+import deadHangImage from "@/assets/dead-hang.png";
+import lsitImage from "@/assets/l-sit.png";
+import chestsStretchImage from "@/assets/chest-stretch.png";
+import straightarmBackwardsStretchImage from "@/assets/straight-arm-backwards-stretch.png";
+import supinatedPushUpsImage from "@/assets/supinated-push-ups.png";
+import benchDipsImage from "@/assets/bench-dips.png";
+import frontLeverImage from "@/assets/front-lever.png";
+import plancheLeanImage from "@/assets/planche-lean.png";
+import frogPoseImage from "@/assets/frog-pose.png";
 
 // Exercise data
 const exercises = [
     {
         id: 1,
-        title: "Push-ups",
+        title: "Pseudo Planche Push-up",
         category: "calisthenics",
         description: "A compound exercise that works the chest, shoulders, triceps, and core muscles.",
         difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Push-ups"
+        image: pushUpsImage  
     },
     {
         id: 2,
-        title: "Pull-ups",
+        title: "Decline Push-up",
         category: "calisthenics",
-        description: "An upper body exercise that targets the back, biceps, and shoulders for building strength.",
-        difficulty: 3,
-        image: "https://via.placeholder.com/300x180?text=Pull-ups"
+        description: "An upper body exercise that targets the chest and triceps.",
+        difficulty: 1,
+        image: declinepushUpsImage
     },
     {
         id: 3,
-        title: "Bodyweight Squats",
+        title: "Pistol Squats",
         category: "calisthenics",
         description: "A lower body exercise focusing on the quadriceps, hamstrings, and glutes.",
-        difficulty: 1,
-        image: "https://via.placeholder.com/300x180?text=Bodyweight+Squats"
+        difficulty: 2,
+        image: pistolSquatsImage
     },
     {
         id: 4,
-        title: "Dips",
-        category: "calisthenics",
-        description: "Targets the triceps, chest, and shoulders while improving upper body strength.",
-        difficulty: 3,
-        image: "https://via.placeholder.com/300x180?text=Dips"
+        title: "Hollow Body Hold",
+        category: "core",
+        description: "A core exercise that targets the mid and low abdominals.",
+        difficulty: 1,
+        image: hollowbodyHoldImage
     },
     {
         id: 5,
-        title: "Plank",
+        title: "Straddle Planche",
         category: "calisthenics",
-        description: "An isometric core strength exercise that involves maintaining a position similar to a push-up.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Plank"
+        description: "An isometric planche progression that requires tremendous strength ",
+        difficulty: 3,
+        image: straddlePlancheImage
     },
     {
         id: 6,
-        title: "Hip Flexor Stretch",
-        category: "mobility",
-        description: "Improves hip flexibility and helps alleviate lower back pain caused by tight hip flexors.",
-        difficulty: 1,
-        image: "https://via.placeholder.com/300x180?text=Hip+Flexor+Stretch"
+        title: "Dragon Flag",
+        category: "core",
+        description: "A core exercise that targets the rectus abdominis, obliques, and transverse abdominis.",
+        difficulty: 3,
+        image: dragonFlagImage
     },
     {
         id: 7,
-        title: "Shoulder Dislocates",
+        title: "Cossack Squat Hold",
         category: "mobility",
-        description: "Enhances shoulder mobility and stability using a resistance band or stick.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Shoulder+Dislocates"
+        description: "A deep lateral squat shifting weight from one leg to the other.",
+        difficulty: 1,
+        image: cossackSquatHoldImage
     },
     {
         id: 8,
-        title: "Deep Squat Hold",
+        title: "Dead Hangs",
         category: "mobility",
-        description: "Improves ankle, knee, and hip mobility while strengthening the lower body.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Deep+Squat+Hold"
+        description: "A grip-strength exercise where you hang from a bar with arms fully extended.",
+        difficulty: 1,
+        image: deadHangImage
     },
     {
         id: 9,
-        title: "Thoracic Bridge",
-        category: "mobility",
-        description: "Enhances thoracic spine mobility and opens up the chest for better posture.",
-        difficulty: 3,
-        image: "https://via.placeholder.com/300x180?text=Thoracic+Bridge"
+        title: "L sit",
+        category: "calisthenics",
+        description: "A core-intensive hold where you support yourself on parallel bars or the floor with legs extended straight in front",
+        difficulty: 2,
+        image: lsitImage
     },
     {
         id: 10,
-        title: "Wrist Circles",
+        title: "One Arm Chest Stretch",
         category: "mobility",
-        description: "Improves wrist mobility and circulation, helping to prevent wrist pain during exercises.",
+        description: "A stretch where one arm is extended against a wall or surface to open up the chest and shoulders.",
         difficulty: 1,
-        image: "https://via.placeholder.com/300x180?text=Wrist+Circles"
+        image: chestsStretchImage
     },
     {
         id: 11,
-        title: "Jumping Jacks",
-        category: "cardio",
-        description: "A full-body exercise that raises heart rate and improves coordination.",
+        title: "Straight Arm Backwards Stretch",
+        category: "mobility",
+        description: "A stretch where you extend your arms straight back to open the chest and shoulders.",
         difficulty: 1,
-        image: "https://via.placeholder.com/300x180?text=Jumping+Jacks"
+        image: straightarmBackwardsStretchImage
     },
     {
         id: 12,
-        title: "Mountain Climbers",
-        category: "cardio",
-        description: "A dynamic exercise that works the core, arms, and legs while elevating heart rate.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Mountain+Climbers"
+        title: "Supinated Push Ups",
+        category: "calisthenics",
+        description: "A push-up variation where your hands are turned palms-up, engaging the biceps and wrists more.",
+        difficulty: 1,
+        image: supinatedPushUpsImage
     },
     {
         id: 13,
-        title: "Burpees",
-        category: "cardio",
-        description: "A challenging full-body exercise that boosts cardiovascular fitness and burns calories.",
-        difficulty: 3,
-        image: "https://via.placeholder.com/300x180?text=Burpees"
+        title: "Bench Dips",
+        category: "calisthenics",
+        description: "A triceps-focused exercise where you lower and raise your body using a bench for support.",
+        difficulty: 1,
+        image: benchDipsImage
     },
     {
         id: 14,
-        title: "High Knees",
-        category: "cardio",
-        description: "A running-in-place exercise that increases heart rate and works the core and legs.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=High+Knees"
+        title: "Front Lever",
+        category: "calisthenics",
+        description: "A full-body strength hold where you hang from a bar and keep your body straight and horizontal.",
+        difficulty: 3,
+        image: frontLeverImage
     },
     {
         id: 15,
-        title: "Jump Rope",
-        category: "cardio",
-        description: "An effective cardio exercise that improves coordination, rhythm, and endurance.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Jump+Rope"
+        title: "Planche Lean",
+        category: "calisthenics",
+        description: "A strength exercise where you lean forward in a push-up position, shifting weight onto your hands to build planche strength.",
+        difficulty: 1,
+        image: plancheLeanImage
     },
      {
         id: 16,
-        title: "Pseudo Push Up",
+        title: "Frog Pose",
         category: "calisthenics",
-        description: "An advanced variation of push-ups that prepares for planche by positioning hands closer to hips.",
-        difficulty: 2,
-        image: "https://via.placeholder.com/300x180?text=Pseudo+Push+Up"
+        description: "A deep hip-opening stretch where you rest on your hands or forearms with knees wide apart.",
+        difficulty: 1,
+        image: frogPoseImage
     }
 ];
 
@@ -199,16 +215,16 @@ const LibraryPage = () => {
                     Mobility
                 </button>
                 <button 
-                    onClick={() => setActiveCategory('cardio')}
+                    onClick={() => setActiveCategory('core')}
                     className={cn(
                         "px-4 py-2 rounded-full text-sm font-semibold transition-colors",
-                        activeCategory === 'cardio' 
+                        activeCategory === 'core' 
                             ? "bg-[#1e628c] text-white" 
                             : "bg-white text-slate-700 hover:bg-slate-100"
                     )}
-                    style={{ backgroundColor: activeCategory === 'cardio' ? customBlue : '' }}
+                    style={{ backgroundColor: activeCategory === 'core' ? customBlue : '' }}
                 >
-                    Cardio
+                    Core
                 </button>
             </div>
 
@@ -260,19 +276,6 @@ const LibraryPage = () => {
                                     {exercise.difficulty === 1 ? 'Beginner' : 
                                      exercise.difficulty === 2 ? 'Intermediate' : 'Advanced'}
                                 </span>
-                            </div>
-
-                            {/* Added exercise details button */}
-                            <div className="mt-4">
-                                <button 
-                                    className="w-full rounded-md bg-slate-100 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors"
-                                    onClick={() => {
-                                        // This would typically open a modal or navigate to details page
-                                        alert(`Details for ${exercise.title} would open here.`);
-                                    }}
-                                >
-                                    View Details
-                                </button>
                             </div>
                         </div>
                     </div>
