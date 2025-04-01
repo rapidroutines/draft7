@@ -1,13 +1,13 @@
-import {
-  BookOpen,
-  ChartColumn,
-  Dumbbell,
-  Home,
-  NotepadText,
-  TreePine,
-  Brain,
-  ClipboardList
-} from "lucide-react";
+import { 
+  BookOpen, 
+  ChartColumn, 
+  Dumbbell, 
+  Home, 
+  NotepadText, 
+  TreePine, 
+  MessageSquare 
+} 
+  from "lucide-react";
 
 export const navbarLinks = [
   {
@@ -33,11 +33,6 @@ export const navbarLinks = [
         icon: NotepadText,
         path: "/repbot",
       },
-      {
-        label: "AI Workout",
-        icon: Brain,
-        path: "/ai-workout",
-      },
     ],
   },
   {
@@ -59,9 +54,9 @@ export const navbarLinks = [
         path: "/rapidtree",
       },
       {
-        label: "Saved Workouts",
-        icon: ClipboardList,
-        path: "/saved-workouts",
+        label: "Saved Chats",
+        icon: MessageSquare,
+        path: "/saved-chats",
       },
     ],
   },
