@@ -21,7 +21,7 @@ const ChatbotPage = () => {
                 {/* Chatbot Iframe with Improved UI */}
                 <div className="h-full w-full p-0">
                     <iframe 
-                        src="https://old-chatbot.vercel.app" 
+                        src="https://render-chatbot-2.onrender.com" 
                         className="h-full w-full border-0"
                         onLoad={() => setIsLoading(false)}
                         title="Chatbot Interface"
